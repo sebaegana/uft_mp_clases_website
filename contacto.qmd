@@ -1,0 +1,16 @@
+---
+title: "Contacto"
+format: html
+---
+
+# Contacto
+
+**Sebastián Egaña Santibáñez**  
+Docente del curso  
+
+- 📧 segana@fen.uchile.cl  
+- 💼 [LinkedIn](https://linkedin.com/in/sebaegana)
+- 💻[Página Web](https://segana.netlify.app) 
+- 🐈[Github](https://github.com/sebaegana)
+
+

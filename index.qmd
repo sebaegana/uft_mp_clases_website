@@ -1,11 +1,13 @@
 ---
-title: "uft_mp_clases_website"
+title: "MAgíster en Administración de Instituciones de Salud "
+subtitle: "Modelos predictivos"
+date: last-modified
+lang: es
+format:
+  html:
+    toc: true
+    theme: cosmo
+    number-sections: false
 ---
 
-This is a Quarto website.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
+Este será el repositorio de los distintos materiales utilizados en el curso. 

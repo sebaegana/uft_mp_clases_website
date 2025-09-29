@@ -1,0 +1,23 @@
+---
+title: "Recursos"
+format: html
+---
+
+# Recursos adicionales
+
+## Libros
+
+(1)	Wickham, H., & Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. " O'Reilly Media, Inc.". [Enlace acá](https://r4ds.had.co.nz/)
+(2)	Grolemund, G. (2014). Hands-on programming with R: Write your own functions and simulations. " O'Reilly Media, Inc.". [Enlace acá](https://rstudio-education.github.io/hopr/)
+(3)	Regenstein Jr, J. K. (2018). Reproducible finance with R: Code flows and shiny apps for portfolio analysis. CRC Press. [Enlace acá](http://www.reproduciblefinance.com/)
+(4)	Scheuch, C., Voigt, S., & Weiss, P. (2023). Tidy Finance with R (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/b23237. [Enlace acá](https://www.tidy-finance.org/)
+(5)	Xie, Y., Allaire, J. J., & Grolemund, G. (2018). R markdown: The definitive guide. CRC Press. [Enlace acá](https://bookdown.org/yihui/rmarkdown/)
+(6) Bryan, J., & Hester, J. (n.d.). Happy Git and GitHub for the useR. [Enlace acá](https://happygitwithr.com)
+
+##
+
+- Utilización de Renv: [Enlace acá](https://docs.posit.co/ide/user/ide/guide/environments/r/renv.html)
+
+## Cheatsheets
+
+- https://posit.co/resources/cheatsheets/

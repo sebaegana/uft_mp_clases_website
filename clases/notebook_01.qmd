@@ -1,0 +1,276 @@
+---
+listing_title: "Clase 01 - Notebook 01"
+title: |
+  | \includegraphics[width=5cm]{Imagen5.png}  
+  | ECO5008 Modelos predictivos
+subtitle: Notebook 01
+format: pdf
+editor: visual
+author:   
+  - Sebastián Egaña Santibáñez [{{< fa brands inbox >}}](mailto:segana@fen.uchile.cl)
+code-block-bg: true
+code-block-border-left: "#FF0000"
+---
+
+------------------------------------------------------------------------
+
+# Enlaces del profesor
+
+[{{< fa brands link >}}](https://segana.netlify.app) https://segana.netlify.app
+
+[{{< fa brands github >}}](https://github.com/sebaegana) https://github.com/sebaegana
+
+[{{< fa brands linkedin >}}](https://www.linkedin.com/in/sebastian-egana-santibanez/) https://www.linkedin.com/in/sebastian-egana-santibanez/
+
+------------------------------------------------------------------------
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(fontawesome)
+```
+
+# Clase 01
+
+# Conceptos iniciales
+
+## Conceptos básicos de series de tiempo
+
+Se habla de series de tiempo cuando nos referimos a una variable sobre la cual observamos su comportamiento a través del tiempo. Un ejemplo conocido, puede ser el principal indicador de productividad de un país, denominado Producto interno bruto (PIB). Veamos la siguiente imagen:
+
+![Obtenida desde: https://revistapaideia.cl/ciclos-economicos-que-son-tipos-y-fases](imagenes/Ejemplos-historicos-de-ciclos-economicos-1.png)
+
+Pasemos ahora a hablar de ciertos componentes de las series de tiempo.
+
+## Tendencia, ciclo, estacionalidad y ruido
+
+-   Tendencia: corresponde al comportamiento general o a la dirección de largo plazo de la serie. Se debe tener cuidado que en algunas variables esto no siempre se cumple.
+
+Veamos el caso para el precio de la acción de LATAM Airlines `r fa("plane-departure", fill = "steelblue")`:
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# install.packages(c("tidyquant", "scales"))  # si no los tienes
+library(tidyquant)
+library(tidyverse)
+library(scales)
+
+ticker <- "LTM.SN"          # Alternativas que a veces se usan: "LTM", "LTMAQ" (histórico OTC)
+desde  <- "2018-01-01"
+
+# 1) Descargar precios diarios (OHLC); 'adjusted' incluye dividendos/splits
+precios <- tq_get(ticker, from = desde, to = Sys.Date())
+
+# 2) Último dato disponible
+ultimo <- precios |> dplyr::slice_tail(n = 1) |> dplyr::pull(adjusted)
+
+# 3) Gráfico
+library(ggplot2)
+ggplot(precios, aes(date, adjusted)) +
+  geom_line(linewidth = 0.8) +
+  labs(
+    title = "LATAM Airlines Group",
+    subtitle = paste0("Último cierre: ",
+                      label_dollar(prefix = "$", big.mark = ".", decimal.mark = ",")(ultimo),
+                      " CLP (", max(precios$date), ")"),
+    x = "Fecha", y = "Precio ajustado (CLP)", caption = "Fuente: Yahoo Finance via tidyquant"
+  ) +
+  theme_minimal()
+
+```
+
+Miremos ahora el caso en donde filtramos el período 2020 - 2021:
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+ticker <- "LTM.SN"
+desde  <- "2020-01-01"
+hasta  <- "2021-12-31"
+
+# 1) Descargar solo 2020–2022
+precios <- tq_get(ticker, from = desde, to = hasta)
+
+# 2) Último precio del período
+ultimo <- precios %>% slice_tail(n = 1) %>% pull(adjusted)
+
+# 3) Gráfico
+ggplot(precios, aes(date, adjusted)) +
+  geom_line(linewidth = 0.8) +
+  labs(
+    title = "LATAM Airlines Group",
+    subtitle = paste0("Último cierre en el rango: ",
+                      label_dollar(prefix = "$", big.mark = ".", decimal.mark = ",")(ultimo),
+                      " CLP (", max(precios$date), ")"),
+    x = "Fecha", y = "Precio ajustado (CLP)",
+    caption = "Fuente: Yahoo Finance vía tidyquant"
+  ) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y-%m") +
+  theme_minimal()
+
+```
+
+¿Qué pasa si filtramos desde el 2024 a la fecha?
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+ticker <- "LTM.SN"
+desde  <- "2024-01-01"
+hasta  <- "2025-09-26"
+
+# 1) Descargar solo 2020–2022
+precios <- tq_get(ticker, from = desde, to = hasta)
+
+# 2) Último precio del período
+ultimo <- precios %>% slice_tail(n = 1) %>% pull(adjusted)
+
+# 3) Gráfico
+ggplot(precios, aes(date, adjusted)) +
+  geom_line(linewidth = 0.8) +
+  labs(
+    title = "LATAM Airlines Group",
+    subtitle = paste0("Último cierre en el rango: ",
+                      label_dollar(prefix = "$", big.mark = ".", decimal.mark = ",")(ultimo),
+                      " CLP (", max(precios$date), ")"),
+    x = "Fecha", y = "Precio ajustado (CLP)",
+    caption = "Fuente: Yahoo Finance vía tidyquant"
+  ) +
+  scale_x_date(date_breaks = "3 months", date_labels = "%Y-%m") +
+  theme_minimal()
+```
+
+Por esta razón debemos tener cuidado con apresurarnos a tomar conclusiones sobre una serie solo en base a la tendencia.
+
+-   Ciclo: corresponde a la variación propia de la serie en torno a la tendencia que no responde a frecuencias predecibles o fijas.
+
+-   Estacionalidad: corresponde a variaciones de la serie que poseen un comportamiento predecible ya sea semanal, menusal o anual.
+
+-   Ruido: corresponde al componente aleatorio e irregular que no puede ser explicado a través de los otros componentes que generalmente se relaciona con variaciones erráticas e impredecibles que no siguen un patrón.
+
+## ¿Por qué analizamos una serie de tiempo?
+
+Se debe justificar el por qué esto es necesario en el contexto de negocios. Por lo general, el interés científico sobre una serie puede darse por dos razones:
+
+1.  Explicar (por qué)
+2.  Predecir (qué y cuánto)
+
+A pesar de esto, el límite entre ambas dinámicas es muy delgado. Veamos el siguiente ejemplo:
+
+\begin{equation}
+\ln w_i \;=\; \beta_0 \;+\; \rho\, S_i \;+\; \beta_1 X_i \;+\; \beta_2 X_i^{2} \;+\; \boldsymbol{\gamma}^{\top} Z_i \;+\; \varepsilon_i
+\end{equation}
+
+-   $w_i$: salario (normalmente por hora, en términos reales).
+-   $S_i$: años de escolaridad
+-   $X_i$: experiencia potencial (se utiliza también un coeficiente al cuadrado)
+-   $Z_i$: puede incluir variables de género, región, etc.
+
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+
+# Parámetros "Mincer" (ejemplo)
+beta0 <- 2.0           # intercepto
+rho   <- 0.08          # retorno a la educación (no afecta la concavidad si S es fijo)
+beta1 <- 0.08          # coef. experiencia > 0
+beta2 <- -0.0015       # coef. experiencia^2 < 0  -> concavidad
+S     <- 12            # años de escolaridad (fijo solo para desplazar el nivel)
+
+# Rango de experiencia (0 a 45 años)
+X <- seq(0, 45, by = 0.25)
+
+# log-salario y salario (opcional) según Mincer
+ln_w <- beta0 + rho*S + beta1*X + beta2*X^2
+w    <- exp(ln_w)
+
+# Vértice (máximo de ln(w))
+x_star <- -beta1/(2*beta2)
+y_star <- beta0 + rho*S + beta1*x_star + beta2*x_star^2
+
+df <- data.frame(X, ln_w, w)
+
+# Gráfico principal: concavidad en log-salario
+p <- ggplot(df, aes(X, ln_w)) +
+  geom_line(linewidth = 1) +
+  geom_vline(xintercept = x_star, linetype = 2, linewidth = 0.6) +
+  labs(
+    title = "Curva minceriana: concavidad en log(salario)",
+    x = "Experiencia potencial (años)",
+    y = "log(salario)"
+  ) +
+  theme_minimal(base_size = 12)
+
+p
+```
+
+Por lo general este modelo se utiliza para poder explicar factores que influyen dentro de la renta de las personas.
+
+Pero ¿qué pasa si en vez de explicar la variable, asumimos que el modelo puede también predecir la variable de interés? `r fa("arrow-up-right-dots", fill = "steelblue")`
+
+-   Pensemos en el comportamiento tradicional que se hace entorno a los promedios de una varriable.
+
+## Predecir, pronosticar y simular
+
+Por lo general predecir se relaciona con contextos más generales que solo estimar el valor futuro de una serie temporal. Se puede referir a estimar el valor de una variable desconocida en distintos contexto temporales, como también estar asociado a variables no temporales (clasificación).
+
+Para el caso de pronosticar, esto conecta por lo general con estimar el valor futuro de una variable (serie de tiempo). En este sentido pronóstico refiere a un contexto más acotado dentro de la dinámica predictiva. **En este sentido, todo pronóstico es una predicción, pero no toda predicción es un pronóstico**.
+
+Una simulación refiere a la generación de múltiples valores futuros posibles a partir de supuestos probabilísticos para medir distribuciones, percentiles, etc.; con esto poder también determinar riesgo relacionado con los valores futuros.
+
+## Algunas técnicas de pronóstico:
+
+Promedio móvil: suaviza datos, útil para detectar tendencia general.
+
+\begin{equation}
+\hat{y}_{t+1} \;=\; \frac{1}{k}\sum_{i=0}^{k-1} y_{t-i}
+\end{equation}
+
+Suavizamiento exponencial simple: otorga más peso a datos recientes, capta mejor los cambios recientes
+
+\begin{equation}
+\hat{y}_{t+1} \;=\; \alpha\, y_t \;+\; (1-\alpha)\,\hat{y}_t,
+\qquad 0<\alpha<1
+\end{equation}
+
+## Ejemplos numéricos
+
+Datos $y_t$: 100, 104, 110, 120, 115, 118, 130, 128, 135, 140
+
+### Promedio
+
+Pensemos en la situación de negocios más simple. Cálculamos el promedio y esto se convierte en nuestro pronóstico:
+
+$$
+\hat{y}_{t+1}=120
+$$
+
+### Promedio móvil (k = 3)
+
+$$
+\hat{y}_{t+1}=\frac{1}{3}(y_t+y_{t-1}+y_{t-2})
+$$
+
+\begin{itemize}
+\item $\hat y_{4}=\frac{110+104+100}{3}=104.67$
+\item $\hat y_{5}=\frac{120+110+104}{3}=111.33$
+\item $\hat y_{6}=\frac{115+120+110}{3}=115.00$
+\end{itemize}
+
+Pronóstico $t=11$: $$\hat y_{11}=\frac{140+135+128}{3}=\mathbf{134.33}$$
+
+### Suavizamiento Exponencial Simple ($\alpha=0.3$)
+
+$$
+s_{t}=\alpha\,y_t+(1-\alpha)\,s_{t-1},\quad s_1=y_1
+$$
+
+\begin{itemize}
+\item $s_1=100$
+\item $s_2=0.3\cdot 104+0.7\cdot 100=101.20$
+\item $s_3=0.3\cdot 110+0.7\cdot 101.20=103.84$
+\item $s_4=0.3\cdot 120+0.7\cdot 103.84=108.688$
+\end{itemize}
+
+Pronóstico $t=11$: $$s_{10}=\mathbf{129.628}$$
+
+# Actividad aplicada
+
+Somos un equipo de analista y debemos que estimar una "buena manera" de poder saber cuántas atenciones tendrémos en el futuro por causas respiratorias. Utilizaremos el siguiente dataset del Gobierno de Chile:
+
+-   [Atenciones de urgencias de causas respiratorias por semana epidemiológica](https://datos.gob.cl/dataset/atenciones-de-urgencia-causas-respiratorias)
+
+## EDA (exploratorio)
