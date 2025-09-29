@@ -13,3 +13,4 @@ gert::git_commit("Initial Quarto site")
 
 usethis::use_github()  # creates repo, sets remote, pushes
 
+## Instalar quarto add quarto-ext/fontawesome

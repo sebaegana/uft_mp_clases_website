@@ -1,0 +1,10 @@
+---
+title: "Clases"
+listing:
+  contents: "*.qmd"
+  sort: "listing_title"
+  type: default
+  fields: [listing_title]    # ✅ Only show the title
+---
+
+# Clases del curso

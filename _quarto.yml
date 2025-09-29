@@ -3,20 +3,21 @@ project:
   output-dir: docs
 
 website:
-  title: "uft_mp_clases_website"
+  title: "Curso Modelos predictivos"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - text: "Inicio"
+        href: index.qmd
+      - text: "Clases"
+        file: clases/index.qmd
+      - text: "Recursos"
+        href: recursos.qmd
+      - text: "Contacto"
+        href: contacto.qmd
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
-    css: styles.css
+    theme: cosmo
     toc: true
 
-editor: visual
 

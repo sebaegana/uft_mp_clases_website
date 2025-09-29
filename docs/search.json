@@ -1,16 +1,72 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "uft_mp_clases_website",
+    "objectID": "recursos.html",
+    "href": "recursos.html",
+    "title": "Recursos",
     "section": "",
-    "text": "This is a Quarto website.\nTo learn more about Quarto websites visit https://quarto.org/docs/websites.\n\n1 + 1\n\n[1] 2"
+    "text": "Wickham, H., & Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. ” O’Reilly Media, Inc.”. Enlace acá\nGrolemund, G. (2014). Hands-on programming with R: Write your own functions and simulations. ” O’Reilly Media, Inc.”. Enlace acá\nRegenstein Jr, J. K. (2018). Reproducible finance with R: Code flows and shiny apps for portfolio analysis. CRC Press. Enlace acá\nScheuch, C., Voigt, S., & Weiss, P. (2023). Tidy Finance with R (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/b23237. Enlace acá\nXie, Y., Allaire, J. J., & Grolemund, G. (2018). R markdown: The definitive guide. CRC Press. Enlace acá\nBryan, J., & Hester, J. (n.d.). Happy Git and GitHub for the useR. Enlace acá\n\n\n\n\n\nUtilización de Renv: Enlace acá\n\n\n\n\n\nhttps://posit.co/resources/cheatsheets/"
+  },
+  {
+    "objectID": "recursos.html#libros",
+    "href": "recursos.html#libros",
+    "title": "Recursos",
+    "section": "",
+    "text": "Wickham, H., & Grolemund, G. (2016). R for data science: import, tidy, transform, visualize, and model data. ” O’Reilly Media, Inc.”. Enlace acá\nGrolemund, G. (2014). Hands-on programming with R: Write your own functions and simulations. ” O’Reilly Media, Inc.”. Enlace acá\nRegenstein Jr, J. K. (2018). Reproducible finance with R: Code flows and shiny apps for portfolio analysis. CRC Press. Enlace acá\nScheuch, C., Voigt, S., & Weiss, P. (2023). Tidy Finance with R (1st ed.). Chapman and Hall/CRC. https://doi.org/10.1201/b23237. Enlace acá\nXie, Y., Allaire, J. J., & Grolemund, G. (2018). R markdown: The definitive guide. CRC Press. Enlace acá\nBryan, J., & Hester, J. (n.d.). Happy Git and GitHub for the useR. Enlace acá"
+  },
+  {
+    "objectID": "recursos.html#section",
+    "href": "recursos.html#section",
+    "title": "Recursos",
+    "section": "",
+    "text": "Utilización de Renv: Enlace acá"
+  },
+  {
+    "objectID": "recursos.html#cheatsheets",
+    "href": "recursos.html#cheatsheets",
+    "title": "Recursos",
+    "section": "",
+    "text": "https://posit.co/resources/cheatsheets/"
+  },
+  {
+    "objectID": "contacto.html",
+    "href": "contacto.html",
+    "title": "Contacto",
+    "section": "",
+    "text": "Contacto\nSebastián Egaña Santibáñez\nDocente del curso\n\n📧 segana@fen.uchile.cl\n\n💼 LinkedIn\n💻Página Web\n🐈Github"
+  },
+  {
+    "objectID": "clases/index.html",
+    "href": "clases/index.html",
+    "title": "Clases",
+    "section": "",
+    "text": "Clases del curso\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nClase 01 - Notebook 01\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "About this site\n\n1 + 1 + 1\n\n[1] 3"
+  },
+  {
+    "objectID": "clases/clases.html",
+    "href": "clases/clases.html",
+    "title": "clases",
+    "section": "",
+    "text": "Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "clases/clases.html#quarto",
+    "href": "clases/clases.html#quarto",
+    "title": "clases",
+    "section": "",
+    "text": "Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org.\n\n1 + 1\n\n[1] 2"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "MAgíster en Administración de Instituciones de Salud",
+    "section": "",
+    "text": "Este será el repositorio de los distintos materiales utilizados en el curso."
   }
 ]

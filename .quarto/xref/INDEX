@@ -4,5 +4,20 @@
   },
   "about.qmd": {
     "about.html": "212cc872"
+  },
+  "contacto.qmd": {
+    "contacto.html": "38da37d0"
+  },
+  "recursos.qmd": {
+    "recursos.html": "3302a640"
+  },
+  "clases/clases.qmd": {
+    "clases.html": "80d36b6d"
+  },
+  "clases/index.qmd": {
+    "index.html": "d74e5311"
+  },
+  "clases/notebook_01.qmd": {
+    "notebook_01.tex": "f350139b"
   }
 }
