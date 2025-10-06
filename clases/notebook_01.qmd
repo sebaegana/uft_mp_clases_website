@@ -286,11 +286,13 @@ library(tidyverse)
 library(DataExplorer)
 library(kableExtra)
 library(knitr)
+library(arrow)
 
 
-dataset_converted <- read_csv("data/dataset_converted.csv")
+#dataset_converted <- read_csv("data/dataset_converted.csv")
+df <- read_parquet("data/at_urg_respiratorio_semanal.parquet")  
 
-df_filtered <- dataset_converted %>% 
+df_filtered <- df %>% 
   filter(Causa == "TOTAL CAUSAS SISTEMA RESPIRATORIO")
 
 intro_table <- introduce(df_filtered)
