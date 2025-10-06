@@ -1,0 +1,510 @@
+---
+listing_title: "Clase 02"
+title: |
+  | \includegraphics[width=5cm]{Imagen5.png}  
+  | ECO5008 Modelos predictivos
+subtitle: Clase 02 - Modelos de Supervivencia y Weibull aplicados a Salud
+format: pdf
+editor: visual
+author:   
+  - Sebastián Egaña Santibáñez [{{< fa brands inbox >}}](mailto:segana@fen.uchile.cl)
+code-block-bg: true
+code-block-border-left: "#FF0000"
+---
+
+------------------------------------------------------------------------
+
+# Enlaces del profesor
+
+[{{< fa brands link >}}](https://segana.netlify.app) https://segana.netlify.app
+
+[{{< fa brands github >}}](https://github.com/sebaegana) https://github.com/sebaegana
+
+[{{< fa brands linkedin >}}](https://www.linkedin.com/in/sebastian-egana-santibanez/) https://www.linkedin.com/in/sebastian-egana-santibanez/
+
+------------------------------------------------------------------------
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(fontawesome)
+library(knitr)
+library(tidyverse)
+```
+
+# Clase 02
+
+# Conceptos iniciales
+
+## Introducción a supervivencia
+
+Cuando hablamos de supervivencia en términos de predicciones nos referimos al esfuerzo de modelar el tiempo que transcurre hacía cierto evento. En el caso del área de salud, podemos pensar en el tiempo que transcurre hasta remisión, alta o rehospitalización. Un área intermedia de aplicación, corresponde a la de ingeniería de la confiabilidad, sirviendo para poder determinar tiempo entre fallas o entre reparaciones.
+
+## Elementos claves
+
+-   La variable relevante para ser analizada corresponde al tiempo hasta el evento, considerando $T > 0$
+
+-   Censura: corresponde a evento que por alguna u otra razón no puede ser observados de manera completa; por ejemplo, si estamos analizando el tiempo antes del alta de los pacientes existirán casos de paciente que aún se encuentran hospitalizados pero que dado el momento de selección del estudio debemos **censurar** en base al valor que posee al momento del estudio. Este tipo de observación solo **añade** a la probabilidad de que el evento ocurra posterior a lo observado y debe ser marcada para incorporarla de manera distinta al análisis.
+
+### Tipos de censura (diagrama)
+
+**Leyenda**
+
+-   `-` tiempo observado
+-   `[` inicio
+-   `]` fin
+-   `|` corte/fin
+-   `*` evento observado
+-   `?` evento en el intervalo
+
+```         
+1) Evento observado (no censurado)
+   Sujeto A: [------*------]            → observamos T = t
+
+2) Censura a derecha (right censoring)
+   Sujeto B: [------------|  ]          → sabemos T > C   
+   (no ocurrió antes del corte)
+
+3) Censura a izquierda (left censoring)
+   Sujeto C:     *-----]                 → sabemos T <= L   
+   (ocurrió antes del 1er registro)
+
+4) Censura por intervalo (interval censoring)
+   Sujeto D: [---?---]                   → sabemos L < T <= R 
+   (entre dos visitas y relacionada con inspecciones)
+
+5) Censura administrativa (Tipo I, corte común de calendario)
+   Sujeto E: [-------|]                  → típicamente “a derecha”
+
+6) Censura Tipo II (por número de eventos)
+   Cohorte: el estudio termina cuando ocurre el k-ésimo evento
+```
+
+## Preguntas
+
+¿Considere en los casos de gestión para los cuales esto podría ser valioso?
+
+# Distribución de Weibull
+
+Se utiliza para modelos los tiempos hasta un evento cuando la tasa de eventos cambia de forma monótona (crece o decrece).
+
+Parámetros.
+
+$k$ (forma): indica cómo cambia el riesgo en el tiempo.
+
+-   $k>1$: riesgo creciente (cada vez más probable el evento).
+-   $k=1$: riesgo constante (caso exponencial).
+-   $k<1$: riesgo decreciente (más probable al inicio).
+
+$\lambda$ (escala): fija la escala temporal (en las mismas unidades que t).
+
+Se puede calcular con covariables (otras ariables relevantes), pero para este caso solo utilizaremos la función sin otras variables.
+
+## Fórmulas clave (Weibull)
+
+Sea $T \sim \text{Weibull}(k,\lambda)$ con $k\>0$ (forma) y $\lambda\>0$ (escala), $t\>0$.
+
+\begin{itemize}
+
+\item $\text{PDF (Weibull)}: \quad f(t)=\frac{k}{\lambda} \left(\frac{t}{\lambda}\right)^{k-1} \exp\!\big[-(t/\lambda)^k\big]$
+
+\item $\textbf{CDF:}\quad F(t)=1-\exp\ \big[-(t/\lambda)^k\big] $
+
+\item $ \textbf{Supervivencia:}\quad S(t)=\exp\!\big[-(t/\lambda)^k\big] $
+
+\item $ \textbf{Riesgo (hazard):}\quad h(t)=\dfrac{k}{\lambda}\ \left(\frac{t}{\lambda}\right)^{k-1} $
+
+\item $ \textbf{Riesgo acumulado:}\quad H(t)=-\ln S(t)=(t/\lambda)^k$
+
+\item $ \textbf{Percentil }p:\quad t_p=\lambda\,\big[-\ln(1-p)\big]^{1/k}$
+
+\item $ \textbf{Mediana:}\quad t_{0.5}=\lambda\,(\ln 2)^{1/k}$
+
+\item $ \textbf{Media:}\quad \mathbb{E}[T]=\lambda\,\Gamma\!\Big(1+\tfrac{1}{k}\Big) $
+
+\end{itemize}
+
+En la práctica, el software (R en este caso) te devuelve $k$, $\lambda$, la media, la mediana y los intervalos sin que tengas que calcularlos a mano.
+
+## Ejemplo simplificado
+
+Tenamos los siguientes datos de altas pacientes con neumonía y queremos predecir el tiempo promedio de hospitalización en días:
+
+```{r message=FALSE, warning=FALSE}
+#| eval: false
+#| include: true
+#| echo: true
+
+tiempo <- c(2,3,1,5,7,8,9,3,4,6,2,10,11,7,5,4,12,8,9,6)
+alta   <- c(1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,0,1,1,1)
+
+```
+
+Recordar que acá la censura corresponde a los pacientes que no han sido dados de alta (alta = 0). 
+
+```{r message=FALSE, warning=FALSE}
+#| eval: true
+#| include: true
+#| echo: false
+
+tiempo <- c(2,3,1,5,7,8,9,3,4,6,2,10,11,7,5,4,12,8,9,6)
+alta   <- c(1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,0,1,1,1)
+
+df <- tibble(TCC = tiempo, DELTA = alta)
+
+units_label <- "días"
+
+# --- Conteos clave ---
+n_total    <- nrow(df)
+n_event    <- sum(df$DELTA == 1)
+n_censored <- sum(df$DELTA == 0)
+event_rate <- n_event / n_total
+
+kable(
+  data.frame(
+    Total = n_total,
+    Eventos_DELTA1 = n_event,
+    Censuras_DELTA0 = n_censored,
+    Proporcion_evento = round(event_rate, 3)
+  ),
+  caption = "Conteos: total, eventos (DELTA=1), censuras (DELTA=0)"
+)
+
+# --- Resumen estadístico (global y por estado) ---
+quant_levels <- c(0, .1, .25, .5, .75, .9, 1)
+qnames <- paste0("q", quant_levels*100)
+
+resumen_global <- df %>%
+  summarise(
+    n     = n(),
+    min   = min(TCC),
+    mean  = mean(TCC),
+    sd    = sd(TCC),
+    median= median(TCC),
+    max   = max(TCC),
+  )
+
+
+resumen_por_estado <- df %>%
+  group_by(DELTA) %>%
+  summarise(
+    n     = n(),
+    min   = min(TCC),
+    mean  = mean(TCC),
+    sd    = sd(TCC),
+    median= median(TCC),
+    max   = max(TCC),
+    .groups = "drop"
+  )
+
+kable(resumen_global, digits = 3,
+      caption = paste("Resumen global de TCC (", units_label, ")", sep=""))
+
+kable(resumen_por_estado, digits = 3,
+      caption = paste("Resumen de TCC por estado DELTA (", units_label, ")", sep=""))
+```
+
+
+Veamos el análisis de Weibull para estos datos:
+
+```{r message=FALSE, warning=FALSE}
+#| eval: true
+#| include: true
+#| echo: false
+
+library(survival)
+library(fitdistrplus)
+
+# -----------------------------
+# Ajuste SIN censura (solo eventos)
+# -----------------------------
+x_evt <- df$TCC[df$DELTA == 1]
+fd_nc <- fitdistrplus::fitdist(x_evt, "weibull")
+k_nc   <- unname(fd_nc$estimate["shape"])
+lam_nc <- unname(fd_nc$estimate["scale"])
+
+# -----------------------------
+# Ajuste CON censura (todos)
+# -----------------------------
+ajuste <- survreg(Surv(TCC, DELTA) ~ 1, dist = "weibull", data = df)
+mu_hat <- as.numeric(coef(ajuste))   # intercepto
+sig    <- ajuste$scale               # σ
+k_c    <- 1 / sig                    # shape
+lam_c  <- exp(mu_hat)                # scale
+
+# -----------------------------
+# Funciones y resúmenes
+# -----------------------------
+w_tp   <- function(p,k,lam) lam * (-log(1-p))^(1/k)
+w_med  <- function(k,lam)   lam * (log(2))^(1/k)
+w_mean <- function(k,lam)   lam * gamma(1 + 1/k)
+
+summ_block <- function(k, lam, caso) {
+  tibble(
+    Caso    = caso,
+    Mediana = w_med(k, lam),
+    Media   = w_mean(k, lam),
+    `p=0.1` = w_tp(0.1, k, lam),
+    `p=0.5` = w_tp(0.5, k, lam),
+    `p=0.9` = w_tp(0.9, k, lam)
+  )
+}
+
+summ_tbl <- bind_rows(
+  summ_block(k_nc, lam_nc, "Sin censura"),
+  summ_block(k_c,  lam_c,  "Con censura")
+) |> mutate(across(where(is.numeric), ~ round(., 4)))
+
+params_tbl <- tibble(
+  Caso = c("Sin censura", "Con censura"),
+  `shape (k)` = c(round(k_nc, 4), round(k_c, 4)),
+  `scale (λ)` = c(round(lam_nc, 4), round(lam_c, 4))
+)
+
+# -----------------------------
+# Tablas (solo kable)
+# -----------------------------
+kable(params_tbl,
+      booktabs = TRUE,
+      caption = "Parámetros Weibull 2P por caso")
+
+kable(summ_tbl,
+      booktabs = TRUE,
+      caption = "Mediana, media y percentiles t_p (p=0.1, 0.5, 0.9)")
+```
+
+
+# Actividad aplicada
+
+Recuerden, seguimos siendo un equipo de analistas. Tenemos datos relacionados con tiempo de cirugías cardíacas en donde nuestro interés se relaciona con estimar el tiempo de la operación hasta que un paciente muere. 
+
+## Estimación de Weibull
+
+### EDA
+
+Veamos algunas estadísticas descriptivas:
+
+```{r message=FALSE, warning=FALSE}
+#| eval: true
+#| include: true
+#| echo: false
+
+library(readxl)
+library(fitdistrplus)
+library(flexsurv)
+library(tidyr)
+library(purrr)
+
+# 1) URL RAW del .xlsm y hoja 'viarapida'
+raw_url <- "https://raw.githubusercontent.com/Raydonal/ML-Weibull/main/viarapida.xlsm"  # cambia si es otro repo
+tmp <- tempfile(fileext = ".xlsm")
+download.file(raw_url, tmp, mode = "wb", quiet = TRUE)
+df <- read_excel(tmp, sheet = "viarapida", .name_repair = "unique") |>
+  transmute(TCC = as.numeric(TCC), DELTA = as.integer(DELTA)) |>
+  filter(is.finite(TCC), TCC > 0, DELTA %in% c(0,1))
+
+stopifnot(nrow(df) > 0)
+
+units_label <- "horas"
+
+# --- Conteos clave ---
+n_total    <- nrow(df)
+n_event    <- sum(df$DELTA == 1)
+n_censored <- sum(df$DELTA == 0)
+event_rate <- n_event / n_total
+
+kable(
+  data.frame(
+    Total = n_total,
+    Eventos_DELTA1 = n_event,
+    Censuras_DELTA0 = n_censored,
+    Proporcion_evento = round(event_rate, 3)
+  ),
+  caption = "Conteos: total, eventos (DELTA=1), censuras (DELTA=0)"
+)
+
+# --- Resumen estadístico (global y por estado) ---
+quant_levels <- c(0, .1, .25, .5, .75, .9, 1)
+qnames <- paste0("q", quant_levels*100)
+
+resumen_global <- df %>%
+  summarise(
+    n     = n(),
+    min   = min(TCC),
+    mean  = mean(TCC),
+    sd    = sd(TCC),
+    median= median(TCC),
+    max   = max(TCC),
+  )
+
+
+resumen_por_estado <- df %>%
+  group_by(DELTA) %>%
+  summarise(
+    n     = n(),
+    min   = min(TCC),
+    mean  = mean(TCC),
+    sd    = sd(TCC),
+    median= median(TCC),
+    max   = max(TCC),
+    .groups = "drop"
+  )
+
+kable(resumen_global, digits = 3,
+      caption = paste("Resumen global de TCC (", units_label, ")", sep=""))
+
+kable(resumen_por_estado, digits = 3,
+      caption = paste("Resumen de TCC por estado DELTA (", units_label, ")", sep=""))
+```
+
+Consideremos realizar un histograma para ver la distribución de las horas de operación:
+
+```{r message=FALSE, warning=FALSE}
+#| eval: true
+#| include: true
+#| echo: false
+
+# --- Histogramas + densidad ---
+ggplot(df, aes(TCC)) +
+  geom_histogram(bins = 30, aes(y = after_stat(density))) +
+  geom_density(linewidth = 1) +
+  labs(title = "Histograma + Densidad de TCC (global)",
+       x = paste("TCC (", units_label, ")", sep=""),
+       y = "Densidad") +
+  theme_minimal()
+
+ggplot(df, aes(TCC, fill = factor(DELTA))) +
+  geom_histogram(bins = 30, position = "identity", alpha = .4) +
+  labs(title = "Histograma por estado (DELTA: 1=muerte, 0=censura)",
+       x = paste("TCC (", units_label, ")", sep=""),
+       fill = "DELTA") +
+  theme_minimal()
+
+```
+Otros gráficos relevantes:
+
+```{r message=FALSE, warning=FALSE}
+#| eval: true
+#| include: true
+#| echo: false
+
+# --- Boxplot por estado ---
+ggplot(df, aes(x = factor(DELTA), y = TCC)) +
+  geom_boxplot(outlier.alpha = .5) +
+  labs(title = "Boxplot de TCC por estado",
+       x = "DELTA (1=muerte, 0=censura)",
+       y = paste("TCC (", units_label, ")", sep="")) +
+  theme_minimal()
+
+# --- ECDF (distribución empírica acumulada) ---
+ggplot(df, aes(TCC)) +
+  stat_ecdf(geom = "step") +
+  labs(title = "ECDF de TCC (global)",
+       x = paste("TCC (", units_label, ")", sep=""),
+       y = "F_hat(t)") +
+  theme_minimal()
+```
+
+
+### Weibull 2P: cálculo con y sin censura 
+
+
+```{r message=FALSE, warning=FALSE}
+#| eval: true
+#| echo: false
+#| include: true
+
+# 2) Ajustes Weibull
+#   a) SIN censura: solo eventos
+x_evt <- df$TCC[df$DELTA == 1]
+fd_nc <- fitdistrplus::fitdist(x_evt, "weibull")
+k_nc   <- unname(fd_nc$estimate["shape"])
+lam_nc <- unname(fd_nc$estimate["scale"])
+
+#   b) CON censura: todos
+fit_c  <- flexsurv::flexsurvreg(Surv(TCC, DELTA) ~ 1, data = df, dist = "weibull")
+k_c    <- fit_c$res["shape","est"]
+lam_c  <- fit_c$res["scale","est"]
+
+params_tbl <- tibble(
+  Caso = c("Sin censura (DELTA==1)", "Con censura (Surv)"),
+  `shape (k)` = c(k_nc, k_c),
+  `scale (λ)` = c(lam_nc, lam_c)
+)
+kable(params_tbl, digits = 4, caption = "Parámetros Weibull 2P por caso")
+
+# 3) Funciones y resúmenes
+w_pdf <- function(t,k,lam) (k/lam)*(t/lam)^(k-1)*exp(-(t/lam)^k)
+w_cdf <- function(t,k,lam) 1 - exp(-(t/lam)^k)
+w_sur <- function(t,k,lam) exp(-(t/lam)^k)
+w_haz <- function(t,k,lam) (k/lam)*(t/lam)^(k-1)
+w_H   <- function(t,k,lam) (t/lam)^k
+w_tp  <- function(p,k,lam) lam * (-log(1-p))^(1/k)
+w_med <- function(k,lam)   lam * (log(2))^(1/k)
+w_mean<- function(k,lam)   lam * gamma(1 + 1/k)
+
+# puntos de evaluación (quintiles del rango observado)
+t_eval <- quantile(df$TCC, probs = c(.1,.3,.5,.7,.9), na.rm = TRUE) |> as.numeric()
+t_cols <- paste0("t=", round(t_eval, 2))
+
+calc_block <- function(k, lam, caso, t_eval, t_cols) {
+  vals <- list(
+    `PDF f(t)`            = w_pdf(t_eval, k, lam),
+    `CDF F(t)`            = w_cdf(t_eval, k, lam),
+    `Supervivencia S(t)`  = w_sur(t_eval, k, lam),
+    `Riesgo h(t)`         = w_haz(t_eval, k, lam),
+    `Riesgo acum. H(t)`   = w_H  (t_eval, k, lam)
+  )
+  mat <- do.call(rbind, lapply(vals, function(v) round(v, 6)))
+  colnames(mat) <- t_cols
+  tibble(Caso = caso, Funcion = names(vals)) |>
+    bind_cols(as_tibble(mat))
+}
+
+tbl_fun_nc <- calc_block(k_nc, lam_nc, "Sin censura", t_eval, t_cols)
+tbl_fun_c  <- calc_block(k_c,  lam_c,  "Con censura", t_eval, t_cols)
+
+kable(bind_rows(tbl_fun_nc, tbl_fun_c),
+      caption = "Funciones evaluadas en t = p10, p30, p50, p70, p90 del TCC")
+
+# Resúmenes: mediana, media y percentiles p
+p_vec <- c(0.1, 0.5, 0.9)
+summ_block <- function(k, lam, caso) {
+  tibble(
+    Caso = caso,
+    Mediana = w_med(k, lam),
+    Media   = w_mean(k, lam)
+  ) |>
+    bind_cols(
+      tibble(Percentil = paste0("p=", p_vec),
+             t_p = w_tp(p_vec, k, lam)) |>
+        pivot_wider(names_from = Percentil, values_from = t_p)
+    )
+}
+summ_tbl <- bind_rows(
+  summ_block(k_nc, lam_nc, "Sin censura"),
+  summ_block(k_c,  lam_c,  "Con censura")
+)
+kable(summ_tbl |> mutate(across(where(is.numeric), ~ round(., 4))),
+      caption = "Mediana, media y percentiles t_p (p=0.1, 0.5, 0.9)")
+
+```
+Para la interpretación de las tablas: Intuición rápida
+
+- $S(t)$: probabilidad de seguir sin evento en el tiempo t.
+- $F(t)$: probabilidad de haber tenido el evento antes del tiempo t.
+- $h(t)$: tasa instantánea a la que cae $S(t)$; si $h(t)$ sube, $S(t)$ cae más rápido.
+- $H(t)$: riesgo acumulado 
+
+## Preguntas
+
+- ¿Cuáles serían las aplicaciones de gestión de este análisis?
+
+# Una aplicación distinta
+
+# Referencias
+
+-   Cavalcante, T., Ospina, R., Leiva, V., Cabezas, X., & Martin-Barreiro, C. (2023). Weibull regression and machine learning survival models: Methodology, comparison, and application to biomedical data related to cardiac surgery. Biology, 12(3), 442.
+
+- Fenina, S., Jendoubi, S., & Bouchoucha, F. (2023). Failure rate estimation by Weibull distribution in a stochastic environment: application to the hemodialysis machine. Reliability: Theory & Applications, 18(3 (74)), 450-463.
+
+- Nketiah, E. A. (2021). Parameter Estimation of the Weibull Distribution; Comparison of the Least-Squares Method and the Maximum Likelihood Estimation. Int. J. Adv. Eng. Res. Sci, 8, 210-224.
+

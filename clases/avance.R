@@ -1,11 +1,22 @@
 install.packages("arrow")   # once
 library(arrow)
 library(tidyverse)
+library(DataExplorer)
+library(arsenal)
 
 # Read a single Parquet file
 df <- read_parquet("data/at_urg_respiratorio_semanal.parquet")   # returns a data.frame/tibble
 
 unique(df$ComunaGlosa)
+
+write_csv(df, "dataset_converted.csv")
+
+df_filtered <- dataset_converted %>% 
+  filter(Causa == "TOTAL CAUSAS SISTEMA RESPIRATORIO")
+
+create_report(df_filtered)
+
+create_report(df_filtered, y = "NumTotal")
 
 sotero <- 
   df %>% 

@@ -1,5 +1,5 @@
 ---
-title: "MAgíster en Administración de Instituciones de Salud "
+title: "Magíster en Administración de Instituciones de Salud "
 subtitle: "Modelos predictivos"
 date: last-modified
 lang: es
