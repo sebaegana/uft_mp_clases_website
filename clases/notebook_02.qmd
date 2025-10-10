@@ -138,7 +138,7 @@ alta   <- c(1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,0,1,1,1)
 
 ```
 
-Recordar que acá la censura corresponde a los pacientes que no han sido dados de alta (alta = 0). 
+Recordar que acá la censura corresponde a los pacientes que no han sido dados de alta (alta = 0).
 
 ```{r message=FALSE, warning=FALSE}
 #| eval: true
@@ -201,7 +201,6 @@ kable(resumen_global, digits = 3,
 kable(resumen_por_estado, digits = 3,
       caption = paste("Resumen de TCC por estado DELTA (", units_label, ")", sep=""))
 ```
-
 
 Veamos el análisis de Weibull para estos datos:
 
@@ -271,10 +270,9 @@ kable(summ_tbl,
       caption = "Mediana, media y percentiles t_p (p=0.1, 0.5, 0.9)")
 ```
 
-
 # Actividad aplicada
 
-Recuerden, seguimos siendo un equipo de analistas. Tenemos datos relacionados con tiempo de cirugías cardíacas en donde nuestro interés se relaciona con estimar el tiempo de la operación hasta que un paciente muere. 
+Recuerden, seguimos siendo un equipo de analistas. Tenemos datos relacionados con tiempo de cirugías cardíacas en donde nuestro interés se relaciona con estimar el tiempo de la operación hasta que un paciente muere.
 
 ## Estimación de Weibull
 
@@ -379,6 +377,7 @@ ggplot(df, aes(TCC, fill = factor(DELTA))) +
   theme_minimal()
 
 ```
+
 Otros gráficos relevantes:
 
 ```{r message=FALSE, warning=FALSE}
@@ -403,9 +402,7 @@ ggplot(df, aes(TCC)) +
   theme_minimal()
 ```
 
-
-### Weibull 2P: cálculo con y sin censura 
-
+### Weibull 2P: cálculo con y sin censura
 
 ```{r message=FALSE, warning=FALSE}
 #| eval: true
@@ -487,16 +484,17 @@ kable(summ_tbl |> mutate(across(where(is.numeric), ~ round(., 4))),
       caption = "Mediana, media y percentiles t_p (p=0.1, 0.5, 0.9)")
 
 ```
+
 Para la interpretación de las tablas: Intuición rápida
 
-- $S(t)$: probabilidad de seguir sin evento en el tiempo t.
-- $F(t)$: probabilidad de haber tenido el evento antes del tiempo t.
-- $h(t)$: tasa instantánea a la que cae $S(t)$; si $h(t)$ sube, $S(t)$ cae más rápido.
-- $H(t)$: riesgo acumulado 
+-   $S(t)$: probabilidad de seguir sin evento en el tiempo t.
+-   $F(t)$: probabilidad de haber tenido el evento antes del tiempo t.
+-   $h(t)$: tasa instantánea a la que cae $S(t)$; si $h(t)$ sube, $S(t)$ cae más rápido.
+-   $H(t)$: riesgo acumulado
 
 ## Preguntas
 
-- ¿Cuáles serían las aplicaciones de gestión de este análisis?
+-   ¿Cuáles serían las aplicaciones de gestión de este análisis?
 
 # Una aplicación distinta
 
@@ -504,7 +502,6 @@ Para la interpretación de las tablas: Intuición rápida
 
 -   Cavalcante, T., Ospina, R., Leiva, V., Cabezas, X., & Martin-Barreiro, C. (2023). Weibull regression and machine learning survival models: Methodology, comparison, and application to biomedical data related to cardiac surgery. Biology, 12(3), 442.
 
-- Fenina, S., Jendoubi, S., & Bouchoucha, F. (2023). Failure rate estimation by Weibull distribution in a stochastic environment: application to the hemodialysis machine. Reliability: Theory & Applications, 18(3 (74)), 450-463.
+-   Fenina, S., Jendoubi, S., & Bouchoucha, F. (2023). Failure rate estimation by Weibull distribution in a stochastic environment: application to the hemodialysis machine. Reliability: Theory & Applications, 18(3 (74)), 450-463.
 
-- Nketiah, E. A. (2021). Parameter Estimation of the Weibull Distribution; Comparison of the Least-Squares Method and the Maximum Likelihood Estimation. Int. J. Adv. Eng. Res. Sci, 8, 210-224.
-
+-   Nketiah, E. A. (2021). Parameter Estimation of the Weibull Distribution; Comparison of the Least-Squares Method and the Maximum Likelihood Estimation. Int. J. Adv. Eng. Res. Sci, 8, 210-224.
