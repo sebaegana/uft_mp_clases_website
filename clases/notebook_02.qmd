@@ -94,35 +94,35 @@ $k$ (forma): indica cómo cambia el riesgo en el tiempo.
 -   $k=1$: riesgo constante (caso exponencial).
 -   $k<1$: riesgo decreciente (más probable al inicio).
 
-$\lambda$ (escala): fija la escala temporal (en las mismas unidades que t).
+$\eta$ (escala): fija la escala temporal (en las mismas unidades que t).
 
 Se puede calcular con covariables (otras ariables relevantes), pero para este caso solo utilizaremos la función sin otras variables.
 
 ## Fórmulas clave (Weibull)
 
-Sea $T \sim \text{Weibull}(k,\lambda)$ con $k\>0$ (forma) y $\lambda\>0$ (escala), $t\>0$.
+Sea $T \sim \text{Weibull}(k,\eta)$ con $k>0$ (forma) y $\eta>0$ (escala), $t>0$.
 
 \begin{itemize}
 
-\item $\text{PDF (Weibull)}: \quad f(t)=\frac{k}{\lambda} \left(\frac{t}{\lambda}\right)^{k-1} \exp\!\big[-(t/\lambda)^k\big]$
+\item $\textbf{PDF (Weibull)}: \quad f(t)=\frac{k}{\eta} \left(\frac{t}{\eta}\right)^{k-1} \exp\!\big[-(t/\eta)^k\big]$
 
-\item $\textbf{CDF:}\quad F(t)=1-\exp\ \big[-(t/\lambda)^k\big] $
+\item $\textbf{CDF:}\quad F(t)=1-\exp\ \big[-(t/\eta)^k\big] $
 
-\item $ \textbf{Supervivencia:}\quad S(t)=\exp\!\big[-(t/\lambda)^k\big] $
+\item $ \textbf{Supervivencia:}\quad S(t)=\exp\!\big[-(t/\eta)^k\big] $
 
-\item $ \textbf{Riesgo (hazard):}\quad h(t)=\dfrac{k}{\lambda}\ \left(\frac{t}{\lambda}\right)^{k-1} $
+\item $ \textbf{Riesgo (hazard):}\quad h(t)=\dfrac{k}{\eta}\ \left(\frac{t}{\eta}\right)^{k-1} $
 
-\item $ \textbf{Riesgo acumulado:}\quad H(t)=-\ln S(t)=(t/\lambda)^k$
+\item $ \textbf{Riesgo acumulado:}\quad H(t)=-\ln S(t)=(t/\eta)^k$
 
-\item $ \textbf{Percentil }p:\quad t_p=\lambda\,\big[-\ln(1-p)\big]^{1/k}$
+\item $ \textbf{Percentil }p:\quad t_p=\eta\,\big[-\ln(1-p)\big]^{1/k}$
 
-\item $ \textbf{Mediana:}\quad t_{0.5}=\lambda\,(\ln 2)^{1/k}$
+\item $ \textbf{Mediana:}\quad t_{0.5}=\eta\,(\ln 2)^{1/k}$
 
-\item $ \textbf{Media:}\quad \mathbb{E}[T]=\lambda\,\Gamma\!\Big(1+\tfrac{1}{k}\Big) $
+\item $ \textbf{Media:}\quad \mathbb{E}[T]=\eta\,\Gamma\!\Big(1+\tfrac{1}{k}\Big) $
 
 \end{itemize}
 
-En la práctica, el software (R en este caso) te devuelve $k$, $\lambda$, la media, la mediana y los intervalos sin que tengas que calcularlos a mano.
+En la práctica, el software (R en este caso) te devuelve $k$, $\eta$, la media, la mediana y los intervalos sin que tengas que calcularlos a mano.
 
 ## Ejemplo simplificado
 
@@ -543,7 +543,10 @@ failures_long <- failures |>
   dplyr::select(machine, Failure_no, Date_of_failure, TBF) |>
   dplyr::arrange(machine, Failure_no)
 
-failures_long
+knitr::kable(failures_long, format = "markdown",
+             caption = "Fallas de máquinas")
+
+
 ```
 
 Estimamos los parámetros de Weibull para cada maquína:
