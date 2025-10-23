@@ -286,71 +286,120 @@ Veamos algunas estadísticas descriptivas:
 #| echo: false
 
 library(readxl)
-library(fitdistrplus)
-library(flexsurv)
-library(tidyr)
-library(purrr)
+library(dplyr)
+library(knitr)
 
-# 1) URL RAW del .xlsm y hoja 'viarapida'
-raw_url <- "https://raw.githubusercontent.com/Raydonal/ML-Weibull/main/viarapida.xlsm"  # cambia si es otro repo
+# --- Parámetros ---
+raw_url    <- "https://raw.githubusercontent.com/Raydonal/ML-Weibull/main/viarapida.xlsm"
+local_dir  <- "data"
+local_path <- file.path(local_dir, "viarapida.xlsm")
+sheet_name <- "viarapida"
+
+# --- Utilidad: descarga con reintentos y backoff exponencial ---
+download_with_retry <- function(url, destfile, mode = "wb", quiet = TRUE,
+                                retries = 5, initial_wait = 2) {
+  wait <- initial_wait
+  for (i in seq_len(retries)) {
+    ok <- tryCatch({
+      download.file(url, destfile, mode = mode, quiet = quiet)
+      TRUE
+    }, error = function(e) FALSE, warning = function(w) FALSE)
+    if (ok && file.exists(destfile) && file.info(destfile)$size > 0) {
+      message(sprintf("✅ Descarga OK en intento %d.", i))
+      return(TRUE)
+    } else {
+      if (i < retries) {
+        message(sprintf("⏳ Falla intento %d. Reintentando en %ds...", i, wait))
+        Sys.sleep(wait)
+        wait <- min(wait * 2, 60)  # tope 60s
+      }
+    }
+  }
+  return(FALSE)
+}
+
+# --- 1) Intentar descargar a un archivo temporal ---
 tmp <- tempfile(fileext = ".xlsm")
-download.file(raw_url, tmp, mode = "wb", quiet = TRUE)
-df <- read_excel(tmp, sheet = "viarapida", .name_repair = "unique") |>
-  transmute(TCC = as.numeric(TCC), DELTA = as.integer(DELTA)) |>
-  filter(is.finite(TCC), TCC > 0, DELTA %in% c(0,1))
+download_ok <- download_with_retry(raw_url, tmp)
+
+# --- 2) Seleccionar fuente: tmp si descarga OK; si no, local; si no, error claro ---
+file_to_read <- NULL
+if (download_ok) {
+  file_to_read <- tmp
+  # cachear una copia local para modo offline
+  if (!dir.exists(local_dir)) dir.create(local_dir, recursive = TRUE, showWarnings = FALSE)
+  file.copy(tmp, local_path, overwrite = TRUE)
+  message(sprintf("💾 Copia cacheada en: %s", normalizePath(local_path)))
+} else if (file.exists(local_path)) {
+  file_to_read <- local_path
+  message(sprintf("📂 Usando copia local: %s", normalizePath(local_path)))
+} else {
+  stop("❌ No se pudo descargar el .xlsm y no existe copia local en 'data/'.")
+}
+
+# --- 3) Verificar que la hoja exista (xlsm puede tener varias hojas) ---
+sheets <- readxl::excel_sheets(path = file_to_read)
+if (!(sheet_name %in% sheets)) {
+  stop(sprintf("❌ La hoja '%s' no existe. Hojas disponibles: %s",
+               sheet_name, paste(sheets, collapse = ", ")))
+}
+
+# --- 4) Leer datos desde la hoja 'viarapida' y limpiar ---
+df <- readxl::read_excel(file_to_read, sheet = sheet_name, .name_repair = "unique") %>%
+  transmute(
+    TCC   = suppressWarnings(as.numeric(TCC)),
+    DELTA = suppressWarnings(as.integer(DELTA))
+  ) %>%
+  filter(is.finite(TCC), TCC > 0, DELTA %in% c(0L, 1L))
 
 stopifnot(nrow(df) > 0)
 
+# --- 5) Resumenes y conteos ---
 units_label <- "horas"
 
-# --- Conteos clave ---
 n_total    <- nrow(df)
-n_event    <- sum(df$DELTA == 1)
-n_censored <- sum(df$DELTA == 0)
+n_event    <- sum(df$DELTA == 1L)
+n_censored <- sum(df$DELTA == 0L)
 event_rate <- n_event / n_total
 
 kable(
   data.frame(
-    Total = n_total,
-    Eventos_DELTA1 = n_event,
-    Censuras_DELTA0 = n_censored,
+    Total             = n_total,
+    Eventos_DELTA1    = n_event,
+    Censuras_DELTA0   = n_censored,
     Proporcion_evento = round(event_rate, 3)
   ),
   caption = "Conteos: total, eventos (DELTA=1), censuras (DELTA=0)"
 )
 
-# --- Resumen estadístico (global y por estado) ---
-quant_levels <- c(0, .1, .25, .5, .75, .9, 1)
-qnames <- paste0("q", quant_levels*100)
-
 resumen_global <- df %>%
   summarise(
-    n     = n(),
-    min   = min(TCC),
-    mean  = mean(TCC),
-    sd    = sd(TCC),
-    median= median(TCC),
-    max   = max(TCC),
+    n      = n(),
+    min    = min(TCC),
+    mean   = mean(TCC),
+    sd     = sd(TCC),
+    median = median(TCC),
+    max    = max(TCC)
   )
-
 
 resumen_por_estado <- df %>%
   group_by(DELTA) %>%
   summarise(
-    n     = n(),
-    min   = min(TCC),
-    mean  = mean(TCC),
-    sd    = sd(TCC),
-    median= median(TCC),
-    max   = max(TCC),
+    n      = n(),
+    min    = min(TCC),
+    mean   = mean(TCC),
+    sd     = sd(TCC),
+    median = median(TCC),
+    max    = max(TCC),
     .groups = "drop"
   )
 
 kable(resumen_global, digits = 3,
-      caption = paste("Resumen global de TCC (", units_label, ")", sep=""))
+      caption = sprintf("Resumen global de TCC (%s)", units_label))
 
 kable(resumen_por_estado, digits = 3,
-      caption = paste("Resumen de TCC por estado DELTA (", units_label, ")", sep=""))
+      caption = sprintf("Resumen de TCC por estado DELTA (%s)", units_label))
+
 ```
 
 Consideremos realizar un histograma para ver la distribución de las horas de operación:

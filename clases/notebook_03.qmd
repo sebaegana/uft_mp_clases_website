@@ -1,0 +1,511 @@
+---
+listing_title: "Clase 02"
+title: |
+  | \includegraphics[width=5cm]{Imagen5.png}  
+  | ECO5008 Modelos predictivos
+subtitle: Clase 03 - Modelos Predictivos en la Gestión de Inventario Médico
+format: pdf
+editor: visual
+author:   
+  - Sebastián Egaña Santibáñez [{{< fa brands inbox >}}](mailto:segana@fen.uchile.cl)
+code-block-bg: true
+code-block-border-left: "#FF0000"
+---
+
+------------------------------------------------------------------------
+
+# Enlaces del profesor
+
+[{{< fa brands link >}}](https://segana.netlify.app) https://segana.netlify.app
+
+[{{< fa brands github >}}](https://github.com/sebaegana) https://github.com/sebaegana
+
+[{{< fa brands linkedin >}}](https://www.linkedin.com/in/sebastian-egana-santibanez/) https://www.linkedin.com/in/sebastian-egana-santibanez/
+
+------------------------------------------------------------------------
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(fontawesome)
+library(knitr)
+library(tidyverse)
+```
+
+# Clase 03
+
+# Conceptos iniciales
+
+## 🧭 ¿Qué es la gestión de inventarios?
+
+Proceso de **planificar, controlar y optimizar** la disponibilidad de insumos médicos para:
+
+- Evitar quiebres de stock (falta de insumos críticos).
+- Reducir sobreinventario y costos asociados.
+- Asegurar la continuidad de las operaciones clínicas y hospitalarias.
+
+## 🏥 Importancia en salud
+
+- Medicamentos, reactivos, guantes, vacunas, etc.
+- Vencimientos y control de temperatura.
+- Costo de oportunidad de un quiebre: puede afectar una cirugía o atención crítica.
+- Balance entre **seguridad del paciente** y **eficiencia operativa**.
+
+## ⚙️ Componentes de un sistema de inventario
+
+| Concepto | Definición | Ejemplo |
+|-----------|------------|---------|
+| **Demanda (D)** | Cantidad requerida en un período. | Guantes por día |
+| **Lead time (L)** | Tiempo entre emitir y recibir un pedido. | 4 días |
+| **Costo de ordenar (K)** | Costo fijo por orden | Trámite y transporte |
+| **Costo de mantener (h)** | Costo anual por unidad almacenada. | Refrigeración, espacio |
+| **Costo de quiebre (p)** | Costo de no disponer de stock. | Suspensión de atención |
+
+## 🔁 Tipos de políticas
+
+| Tipo | Descripción | Notación |
+|------|--------------|-----------|
+| **Revisión continua** | Se repone cuando el inventario baja a un umbral $R$ | Política (Q, R) |
+| **Revisión periódica** | Se revisa en intervalos fijos de tiempo. | Política (s, S) |
+
+➡️ Usaremos **revisión continua (Q,R)**:  
+- $Q$: cantidad que se pide cada vez.  
+- $R$: punto que activa el pedido.
+
+## 📈 Tipos de demanda
+
+| Tipo | Característica | Aplicación |
+|------|----------------|-------------|
+| **Determinística** | Conocida con certeza. | Insumos rutinarios. |
+| **Probabilística** | Aleatoria, con distribución. | Medicamentos urgentes. |
+
+👉 En contextos médicos, la demanda suele modelarse como **Poisson**:
+
+$$
+X_t \sim \text{Poisson}(\lambda)
+$$
+
+donde $\lambda$ = tasa promedio diaria de consumo.
+
+
+## 📊 Variables principales
+
+| Símbolo | Nombre | Interpretación |
+|----------|---------|----------------|
+| $D$ | Demanda anual | $\lambda \times \text{días por año}$ |
+| $K$ | Costo de ordenar | Costo fijo por pedido |
+| $h$ | Costo de mantener | Por unidad-año |
+| $Q$ | Cantidad pedida | Tamaño del pedido |
+| $R$ | Punto de pedido | Nivel que activa la orden |
+| $L$ | Lead time | Tiempo de entrega |
+| $CSL$ | Cycle Service Level | Probabilidad de no quiebre |
+
+### 💰 ¿Qué es el costo del pedido?
+
+Corresponde a **todos los costos fijos asociados a emitir y recibir una orden de compra**, independientes de cuántas unidades se pidan.
+
+$$
+K = \text{Costo fijo por pedido (no depende de la cantidad pedida)}
+$$
+
+### 🧾 Ejemplos hospitalarios
+
+| Tipo de costo | Descripción | Ejemplo |
+|----------------|-------------|----------|
+| **Administrativo** | Tiempo y personal para emitir la orden de compra. | Funcionario que gestiona el pedido. |
+| **Transporte y recepción** | Gastos fijos de entrega. | Camión o courier. |
+| **Inspección y registro** | Control y registro del lote recibido. | Verificación de guantes o vacunas. |
+| **Procesamiento interno** | Costos de sistema o contabilidad. | Registro en ERP o SIGA. |
+| **Oportunidad operativa** | Tiempo que se detiene por el proceso de compra. | Coordinación con bodega y proveedor. |
+
+Estos costos ocurren **cada vez que se hace un pedido**, sin importar el tamaño.
+
+\newpage
+
+## ⚖️ Modelo EOQ (Economic Order Quantity)
+
+Minimiza el **costo total anual**:
+
+$$
+C(Q) = \frac{K D}{Q} + \frac{h Q}{2}
+$$
+
+- Primer término → costo de ordenar
+- Segundo término → costo de mantener
+
+El punto óptimo ocurre cuando ambos costos son iguales:
+
+$$
+Q^* = \sqrt{\frac{2KD}{h}}
+$$
+
+
+## 📦 Punto de pedido $R$
+
+Durante el lead time puede haber demanda aleatoria. Por eso se define el **punto de pedido**:
+
+$$
+R = \text{Demanda esperada en el lead time} + \text{Stock de seguridad}
+$$
+
+El **stock de seguridad (SS)** se ajusta al nivel de servicio deseado:
+
+$$
+SS = z \cdot \sigma_L \quad \text{o, para demanda Poisson,} \quad R = qpois(CSL, \lambda L)
+$$
+
+## 🤖 Rol de los modelos predictivos
+
+Los modelos predictivos permiten estimar:
+- La demanda futura $\hat{D}$ o $\hat{\lambda}$
+- El riesgo de quiebre y niveles óptimos de servicio
+- Los costos esperados bajo distintas políticas (Q, R)
+
+➡️ Así respondemos a tres preguntas clave:
+
+1. **¿Cuánto pedir?** $(Q)$
+2. **¿Cuándo pedir?** $(R)$
+3. **¿Qué nivel de servicio ofrecer?** $(CSL)$
+
+## 🧩 En resumen
+
+- La gestión de inventario médico combina **logística y analítica**
+- Los modelos predictivos ayudan a anticipar la demanda
+- EOQ y Poisson permiten decidir racionalmente **cantidad y momento óptimo** de pedido
+- En la siguiente parte: aplicaremos estas ideas en un **caso práctico**
+
+# Ejercicio: EOQ y punto de pedido con demanda Poisson
+
+## 🎯 Objetivo de la clase
+
+Aplicar modelos predictivos para **optimizar el inventario médico** mediante:
+
+- Cálculo de la **Cantidad Económica de Pedido (EOQ)**
+- Determinación del **Punto de Pedido (R)** con demanda Poisson
+- Interpretación del **nivel de servicio (CSL)**
+
+## 🏥 Contexto del caso
+
+Un hospital gestiona guantes estériles.
+
+| Parámetro | Valor | Descripción |
+|------------|--------|-------------|
+| λ | 15 unid/día | Demanda promedio (Poisson) |
+| Días/año | 300 | Operaciones anuales |
+| L | 4 días | Lead time de reposición |
+| K | \$120 | Costo de ordenar |
+| h | \$8 | Costo anual por unidad almacenada |
+| CSL | 95% | Nivel de servicio deseado |
+
+
+## 1️⃣ Demanda anual
+
+$$
+D = \lambda \times 300 = 15 \times 300 = 4{,}500\ \text{unidades/año}
+$$
+
+## 2️⃣ EOQ – Cantidad económica de pedido
+
+**Fórmula general:**
+
+$$
+Q^* = \sqrt{\frac{2KD}{h}}
+$$
+
+**Cálculo:**
+
+$$
+Q^* = \sqrt{\frac{2(120)(4500)}{8}} = \sqrt{135{,}000} \approx 367
+$$
+
+✅ Se recomienda pedir **367 unidades por orden**.
+
+## 3️⃣ Demanda durante el lead time
+
+Demanda aleatoria:
+$$
+X \sim \text{Poisson}(\lambda L)
+$$
+$$
+\mathbb{E}[X] = 15 \times 4 = 60
+$$
+
+Buscamos el **punto de pedido R** tal que:
+
+$$
+\Pr(X \le R) \ge 0.95
+$$
+
+---
+
+## 4️⃣ Cálculo del punto de pedido
+
+### Aproximación Normal
+
+$$
+R \approx 60 + 1.64\sqrt{60} = 72.7 \approx 73
+$$
+
+### Cálculo exacto (cuantil Poisson):
+
+$$
+R = qpois(0.95, 60) = 73
+$$
+
+🧮 **Stock de seguridad:**  
+
+$$
+SS = R - \lambda L = 73 - 60 = 13
+$$
+
+---
+
+## 5️⃣ Costo total anual
+
+$$
+C(Q^*) = \frac{K D}{Q^*} + \frac{h Q^*}{2}
+$$
+
+$$
+C(Q^*) = \frac{120(4500)}{367} + \frac{8(367)}{2}
+\approx 1{,}470 + 1{,}470 = 2{,}940
+$$
+
+💰 **Costo total anual:** ≈ \$2.940
+
+---
+
+## 📊 Resultados clave
+
+| Concepto | Valor | Interpretación |
+|-----------|--------|----------------|
+| \(Q^*\) | 367 unid | Tamaño óptimo del pedido |
+| \(R\) | 73 unid | Punto de reposición |
+| \(SS\) | 13 unid | Colchón de seguridad |
+| \(C(Q^*)\) | \$2.940 | Costo anual mínimo |
+
+---
+
+## 💻 Código en R
+
+```{r}
+lambda <- 15
+days <- 300
+D <- lambda * days
+L <- 4
+K <- 120
+h <- 8
+CSL <- 0.95
+
+Q_star <- sqrt(2*K*D/h)
+R <- qpois(CSL, lambda*L)
+C_annual <- K*D/Q_star + h*Q_star/2
+
+list(Q_star=Q_star, R=R, C_annual=C_annual)
+```
+
+
+```{r}
+# Parámetros
+lambda <- 15      # demanda diaria
+days   <- 300
+D      <- lambda * days
+L      <- 4
+K      <- 120
+h      <- 8
+CSL    <- 0.95
+
+# 1) EOQ
+Q_star <- sqrt(2*K*D/h)
+
+# 2) Punto de pedido con Poisson
+R <- qpois(CSL, lambda = lambda*L)
+
+# 3) Costo anual con Q*
+C_annual <- K*D/Q_star + h*Q_star/2
+
+list(Q_star = Q_star, R = R, C_annual = C_annual)
+
+# ---- Simulación simple de 1 año (demanda diaria Poisson, política (Q*,R)) ----
+set.seed(123)
+Q <- round(Q_star)
+inv <-  Q          # inventario inicial
+on_order <- 0      # unidades en tránsito
+lt_queue <- integer(0) # cola de llegadas: días restantes hasta arribo
+
+stockouts <- 0
+orders <- 0
+
+for (t in 1:days) {
+  # Arribos
+  if (length(lt_queue) > 0 && lt_queue[1] == 0) {
+    inv <- inv + on_order
+    on_order <- 0
+    lt_queue <- lt_queue[-1]
+  }
+  lt_queue <- lt_queue - 1
+
+  # Demanda del día
+  d <- rpois(1, lambda)
+  if (d <= inv) {
+    inv <- inv - d
+  } else {
+    # quiebre (sin backorder en esta versión)
+    stockouts <- stockouts + (d - inv)
+    inv <- 0
+  }
+
+  # Revisión continua: si inventario <= R y no hay pedido en tránsito, ordenar Q
+  if (inv <= R && on_order == 0) {
+    on_order <- Q
+    lt_queue <- c(lt_queue, L) # llega en L días
+    orders <- orders + 1
+  }
+}
+
+list(orders = orders, stockouts = stockouts, end_inventory = inv)
+```
+```{r}
+#| message: false
+#| warning: false
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+# Parámetros
+lambda <- 15      # demanda diaria
+days   <- 300
+D      <- lambda * days
+L      <- 4
+K      <- 120
+h      <- 8
+CSL    <- 0.95
+
+# 1) EOQ y R
+Q_star <- sqrt(2*K*D/h)
+Q <- round(Q_star)
+R <- qpois(CSL, lambda = lambda*L)
+
+# 2) Simulación diaria (revisión continua (Q,R))
+set.seed(123)
+inv <- Q                 # inventario on-hand (inicial: un pedido completo)
+on_order <- 0            # unidades en tránsito (0 al inicio)
+lt_queue <- integer(0)   # cola de días hasta arribo de cada pedido
+
+df <- tibble(
+  day        = integer(),
+  demand     = integer(),
+  inv_onhand = integer(),
+  inv_pos    = integer(), # posición: on-hand + on-order
+  order_placed = integer(),
+  arrival      = integer(),
+  stockout_units = integer()
+)
+
+orders <- 0
+cum_stockouts <- 0
+
+for (t in 1:days) {
+
+  arrival_flag <- 0
+  # Arribo si corresponde (primero comprobamos arribo de pedidos previos)
+  if (length(lt_queue) > 0 && lt_queue[1] == 0) {
+    inv <- inv + on_order
+    on_order <- 0
+    lt_queue <- lt_queue[-1]
+    arrival_flag <- 1
+  }
+  # Luego, corremos el reloj de los pedidos en tránsito
+  if (length(lt_queue) > 0) lt_queue <- lt_queue - 1
+
+  # Demanda Poisson del día
+  d <- rpois(1, lambda)
+  stockout_today <- 0
+  if (d <= inv) {
+    inv <- inv - d
+  } else {
+    stockout_today <- d - inv
+    inv <- 0
+  }
+  cum_stockouts <- cum_stockouts + stockout_today
+
+  # Política (Q,R): si inv <= R y NO hay pedido en tránsito, emitir pedido Q
+  order_flag <- 0
+  if (inv <= R && on_order == 0) {
+    on_order <- Q
+    lt_queue <- c(lt_queue, L)  # llegará en L días
+    orders <- orders + 1
+    order_flag <- 1
+  }
+
+  inv_pos <- inv + on_order
+
+  df <- bind_rows(df, tibble(
+    day = t,
+    demand = d,
+    inv_onhand = inv,
+    inv_pos = inv_pos,
+    order_placed = order_flag,
+    arrival = arrival_flag,
+    stockout_units = stockout_today
+  ))
+}
+
+df <- df %>% mutate(cum_stockouts = cumsum(stockout_units))
+resumen <- list(
+  Q_star = Q_star, R = R,
+  orders = orders,
+  end_inventory = df$inv_onhand[days],
+  total_stockouts = sum(df$stockout_units)
+)
+resumen
+```
+```{r}
+ggplot(df, aes(day, inv_onhand)) +
+geom_line() +
+geom_hline(yintercept = R, linetype = 2) +
+labs(title = "Trayectoria del inventario (on-hand)",
+x = "Día", y = "Unidades") +
+annotate("text", x = max(df$day)*0.85, y = R + 5, label = paste0("R = ", R))
+
+```
+```{r}
+ggplot(df, aes(day, inv_onhand)) +
+geom_line() +
+geom_point(data = df %>% filter(order_placed == 1),
+aes(day, inv_onhand), shape = 24, size = 2) +  # triángulo: pedido
+geom_point(data = df %>% filter(arrival == 1),
+aes(day, inv_onhand), shape = 21, size = 2) +  # círculo: arribo
+geom_hline(yintercept = R, linetype = 2) +
+labs(title = "Inventario con eventos (pedidos y arribos)",
+x = "Día", y = "Unidades",
+caption = "▲ = pedido emitido | ○ = pedido recibido")
+
+```
+
+```{r}
+ggplot(df, aes(day, cum_stockouts)) +
+geom_line() +
+labs(title = "Demanda insatisfecha acumulada (stockouts)",
+x = "Día", y = "Unidades acumuladas")
+
+
+```
+```{r}
+ggplot(df, aes(demand)) +
+geom_histogram(binwidth = 1, boundary = 0, closed = "left") +
+labs(title = "Distribución de la demanda diaria (Poisson)",
+x = "Unidades por día", y = "Frecuencia")
+
+```
+
+
+**Notas didácticas:**
+
+- La **línea discontinua** indica el **punto de pedido R**. Verás que los **pedidos** se emiten justo cuando el inventario baja a ese nivel.  
+- El **salto** en el inventario coincide con un **arribo** tras $L$ días.  
+- El gráfico de **stockouts** te muestra si, pese al $CSL=95\%$, hubo demanda no atendida (debería ser baja/ocasional).  
+- El **histograma** ayuda a explicar por qué necesitamos **stock de seguridad**: la demanda diaria fluctúa. 
+
+
+
+
+
