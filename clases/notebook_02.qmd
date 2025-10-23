@@ -500,7 +500,7 @@ Para la interpretación de las tablas: Intuición rápida
 
 Se sabe que las maquinas de hemodiálisis son necesarias para poder mantener el tratamiento de los pacientes, requiriendo siempre un funcionamiento eficiente y continuo. Utilizando la distribución de Weibull podemos caracterizar la dinámica de fallas para dichas máquinas.
 
-Tenemos los eventos de fallas para tres máquinas de hemodiálisis distintas: 
+Tenemos los eventos de fallas para tres máquinas de hemodiálisis distintas:
 
 ```{r message=FALSE, warning=FALSE}
 #| eval: true
@@ -596,22 +596,20 @@ knitr::kable(resumen, format = "markdown",
 
 ```
 
+## Preguntas
 
-##  Preguntas
-
-- ¿Qué conclusiones podemos sacar de los números obtenidos?
-- ¿Qué aplicaciones de negocio/gestión puede considerar?
+-   ¿Qué conclusiones podemos sacar de los números obtenidos?
+-   ¿Qué aplicaciones de negocio/gestión puede considerar?
 
 ## Intervalo óptimo de mantención
 
 Considerando que ya podemos caracterizar la dinámica de fallas para cada máquina, ¿podríamos hacer algún análisis para poder tener alguna estrageia que permita evitar la falla de la maquinaria? Acá debemos entender la diferencia entre falla correcta y falla preventiva:
 
-- Falla correctiva: generar costos de reparación, pero a la vez costos relacionados con la interrupción operativa debido a la falla.
+-   Falla correctiva: generar costos de reparación, pero a la vez costos relacionados con la interrupción operativa debido a la falla.
 
-- Falla preventiva: debido a que puede ser planificada, se asume que genera solo los costos de la mantención preventiva (por ejemplo un overhaul)
+-   Falla preventiva: debido a que puede ser planificada, se asume que genera solo los costos de la mantención preventiva (por ejemplo un overhaul)
 
-No se tienen en cuenta costos de inspección, para simplificar el análisis. 
-
+No se tienen en cuenta costos de inspección, para simplificar el análisis.
 
 ### Estrategia de mantención
 
@@ -619,13 +617,12 @@ La dinámica de mantención, cuando existe mantenimiento preventivo, considera l
 
 El punto para optimizar la estrategia de mantención corresponde al punto donde se minimiza la siguiente función:
 
-$$C(T) = \frac{C_{PM}}{T} \;+\; \frac{C_{CM}}{T}\,\lambda(T)$$
-Donde 
+$$C(T) = \frac{C_{PM}}{T} \;+\; \frac{C_{CM}}{T}\,\lambda(T)$$ Donde
 
-- $C_{PM}$: costo del mantenimiento preventivo
-- $C_{CM}$: costo del mantenimiento correctivo
-- $T$: intervalo de mantenimiento preventivo
-- $\lambda(T)$: tasa de falla (hazard rate) al tiempo
+-   $C_{PM}$: costo del mantenimiento preventivo
+-   $C_{CM}$: costo del mantenimiento correctivo
+-   $T$: intervalo de mantenimiento preventivo
+-   $\lambda(T)$: tasa de falla (hazard rate) al tiempo
 
 Siendo $\lambda(T)$:
 
@@ -702,7 +699,6 @@ knitr::kable(res, format = "markdown",
 
 
 ```
-
 
 # Referencias
 
