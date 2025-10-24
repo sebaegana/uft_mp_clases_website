@@ -1,5 +1,5 @@
 ---
-listing_title: "Clase 02"
+listing_title: "Clase 03"
 title: |
   | \includegraphics[width=5cm]{Imagen5.png}  
   | ECO5008 Modelos predictivos
@@ -38,21 +38,21 @@ library(tidyverse)
 
 Proceso de **planificar, controlar y optimizar** la disponibilidad de insumos médicos para:
 
-- Evitar quiebres de stock (falta de insumos críticos).
-- Reducir sobreinventario y costos asociados.
-- Asegurar la continuidad de las operaciones clínicas y hospitalarias.
+-   Evitar quiebres de stock (falta de insumos críticos).
+-   Reducir sobreinventario y costos asociados.
+-   Asegurar la continuidad de las operaciones clínicas y hospitalarias.
 
 ## 🏥 Importancia en salud
 
-- Medicamentos, reactivos, guantes, vacunas, etc.
-- Vencimientos y control de temperatura.
-- Costo de oportunidad de un quiebre: puede afectar una cirugía o atención crítica.
-- Balance entre **seguridad del paciente** y **eficiencia operativa**.
+-   Medicamentos, reactivos, guantes, vacunas, etc.
+-   Vencimientos y control de temperatura.
+-   Costo de oportunidad de un quiebre: puede afectar una cirugía o atención crítica.
+-   Balance entre **seguridad del paciente** y **eficiencia operativa**.
 
 ## ⚙️ Componentes de un sistema de inventario
 
 | Concepto | Definición | Ejemplo |
-|-----------|------------|---------|
+|-------------------------|---------------------------|---------------------|
 | **Demanda (D)** | Cantidad requerida en un período. | Guantes por día |
 | **Lead time (L)** | Tiempo entre emitir y recibir un pedido. | 4 días |
 | **Costo de ordenar (K)** | Costo fijo por orden | Trámite y transporte |
@@ -62,19 +62,19 @@ Proceso de **planificar, controlar y optimizar** la disponibilidad de insumos m�
 ## 🔁 Tipos de políticas
 
 | Tipo | Descripción | Notación |
-|------|--------------|-----------|
+|-----------------|-------------------------------|------------------------|
 | **Revisión continua** | Se repone cuando el inventario baja a un umbral $R$ | Política (Q, R) |
 | **Revisión periódica** | Se revisa en intervalos fijos de tiempo. | Política (s, S) |
 
-➡️ Usaremos **revisión continua (Q,R)**:  
-- $Q$: cantidad que se pide cada vez.  
+➡️ Usaremos **revisión continua (Q,R)**:\
+- $Q$: cantidad que se pide cada vez.\
 - $R$: punto que activa el pedido.
 
 ## 📈 Tipos de demanda
 
-| Tipo | Característica | Aplicación |
-|------|----------------|-------------|
-| **Determinística** | Conocida con certeza. | Insumos rutinarios. |
+| Tipo               | Característica               | Aplicación             |
+|--------------------|------------------------------|------------------------|
+| **Determinística** | Conocida con certeza.        | Insumos rutinarios.    |
 | **Probabilística** | Aleatoria, con distribución. | Medicamentos urgentes. |
 
 👉 En contextos médicos, la demanda suele modelarse como **Poisson**:
@@ -85,18 +85,17 @@ $$
 
 donde $\lambda$ = tasa promedio diaria de consumo.
 
-
 ## 📊 Variables principales
 
-| Símbolo | Nombre | Interpretación |
-|----------|---------|----------------|
-| $D$ | Demanda anual | $\lambda \times \text{días por año}$ |
-| $K$ | Costo de ordenar | Costo fijo por pedido |
-| $h$ | Costo de mantener | Por unidad-año |
-| $Q$ | Cantidad pedida | Tamaño del pedido |
-| $R$ | Punto de pedido | Nivel que activa la orden |
-| $L$ | Lead time | Tiempo de entrega |
-| $CSL$ | Cycle Service Level | Probabilidad de no quiebre |
+| Símbolo | Nombre              | Interpretación                       |
+|---------|---------------------|--------------------------------------|
+| $D$     | Demanda anual       | $\lambda \times \text{días por año}$ |
+| $K$     | Costo de ordenar    | Costo fijo por pedido                |
+| $h$     | Costo de mantener   | Por unidad-año                       |
+| $Q$     | Cantidad pedida     | Tamaño del pedido                    |
+| $R$     | Punto de pedido     | Nivel que activa la orden            |
+| $L$     | Lead time           | Tiempo de entrega                    |
+| $CSL$   | Cycle Service Level | Probabilidad de no quiebre           |
 
 ### 💰 ¿Qué es el costo del pedido?
 
@@ -109,7 +108,7 @@ $$
 ### 🧾 Ejemplos hospitalarios
 
 | Tipo de costo | Descripción | Ejemplo |
-|----------------|-------------|----------|
+|-----------------------------|------------------------|-------------------|
 | **Administrativo** | Tiempo y personal para emitir la orden de compra. | Funcionario que gestiona el pedido. |
 | **Transporte y recepción** | Gastos fijos de entrega. | Camión o courier. |
 | **Inspección y registro** | Control y registro del lote recibido. | Verificación de guantes o vacunas. |
@@ -128,15 +127,14 @@ $$
 C(Q) = \frac{K D}{Q} + \frac{h Q}{2}
 $$
 
-- Primer término → costo de ordenar
-- Segundo término → costo de mantener
+-   Primer término → costo de ordenar
+-   Segundo término → costo de mantener
 
 El punto óptimo ocurre cuando ambos costos son iguales:
 
 $$
 Q^* = \sqrt{\frac{2KD}{h}}
 $$
-
 
 ## 📦 Punto de pedido $R$
 
@@ -154,23 +152,20 @@ $$
 
 ## 🤖 Rol de los modelos predictivos
 
-Los modelos predictivos permiten estimar:
-- La demanda futura $\hat{D}$ o $\hat{\lambda}$
-- El riesgo de quiebre y niveles óptimos de servicio
-- Los costos esperados bajo distintas políticas (Q, R)
+Los modelos predictivos permiten estimar: - La demanda futura $\hat{D}$ o $\hat{\lambda}$ - El riesgo de quiebre y niveles óptimos de servicio - Los costos esperados bajo distintas políticas (Q, R)
 
 ➡️ Así respondemos a tres preguntas clave:
 
-1. **¿Cuánto pedir?** $(Q)$
-2. **¿Cuándo pedir?** $(R)$
-3. **¿Qué nivel de servicio ofrecer?** $(CSL)$
+1.  **¿Cuánto pedir?** $(Q)$
+2.  **¿Cuándo pedir?** $(R)$
+3.  **¿Qué nivel de servicio ofrecer?** $(CSL)$
 
 ## 🧩 En resumen
 
-- La gestión de inventario médico combina **logística y analítica**
-- Los modelos predictivos ayudan a anticipar la demanda
-- EOQ y Poisson permiten decidir racionalmente **cantidad y momento óptimo** de pedido
-- En la siguiente parte: aplicaremos estas ideas en un **caso práctico**
+-   La gestión de inventario médico combina **logística y analítica**
+-   Los modelos predictivos ayudan a anticipar la demanda
+-   EOQ y Poisson permiten decidir racionalmente **cantidad y momento óptimo** de pedido
+-   En la siguiente parte: aplicaremos estas ideas en un **caso práctico**
 
 # Ejercicio: EOQ y punto de pedido con demanda Poisson
 
@@ -178,23 +173,22 @@ Los modelos predictivos permiten estimar:
 
 Aplicar modelos predictivos para **optimizar el inventario médico** mediante:
 
-- Cálculo de la **Cantidad Económica de Pedido (EOQ)**
-- Determinación del **Punto de Pedido (R)** con demanda Poisson
-- Interpretación del **nivel de servicio (CSL)**
+-   Cálculo de la **Cantidad Económica de Pedido (EOQ)**
+-   Determinación del **Punto de Pedido (R)** con demanda Poisson
+-   Interpretación del **nivel de servicio (CSL)**
 
 ## 🏥 Contexto del caso
 
 Un hospital gestiona guantes estériles.
 
-| Parámetro | Valor | Descripción |
-|------------|--------|-------------|
-| λ | 15 unid/día | Demanda promedio (Poisson) |
-| Días/año | 300 | Operaciones anuales |
-| L | 4 días | Lead time de reposición |
-| K | \$120 | Costo de ordenar |
-| h | \$8 | Costo anual por unidad almacenada |
-| CSL | 95% | Nivel de servicio deseado |
-
+| Parámetro | Valor       | Descripción                       |
+|-----------|-------------|-----------------------------------|
+| λ         | 15 unid/día | Demanda promedio (Poisson)        |
+| Días/año  | 300         | Operaciones anuales               |
+| L         | 4 días      | Lead time de reposición           |
+| K         | \$120       | Costo de ordenar                  |
+| h         | \$8         | Costo anual por unidad almacenada |
+| CSL       | 95%         | Nivel de servicio deseado         |
 
 ## 1️⃣ Demanda anual
 
@@ -220,11 +214,9 @@ $$
 
 ## 3️⃣ Demanda durante el lead time
 
-Demanda aleatoria:
-$$
+Demanda aleatoria: $$
 X \sim \text{Poisson}(\lambda L)
-$$
-$$
+$$ $$
 \mathbb{E}[X] = 15 \times 4 = 60
 $$
 
@@ -234,7 +226,7 @@ $$
 \Pr(X \le R) \ge 0.95
 $$
 
----
+------------------------------------------------------------------------
 
 ## 4️⃣ Cálculo del punto de pedido
 
@@ -250,13 +242,13 @@ $$
 R = qpois(0.95, 60) = 73
 $$
 
-🧮 **Stock de seguridad:**  
+🧮 **Stock de seguridad:**
 
 $$
 SS = R - \lambda L = 73 - 60 = 13
 $$
 
----
+------------------------------------------------------------------------
 
 ## 5️⃣ Costo total anual
 
@@ -271,18 +263,18 @@ $$
 
 💰 **Costo total anual:** ≈ \$2.940
 
----
+------------------------------------------------------------------------
 
 ## 📊 Resultados clave
 
-| Concepto | Valor | Interpretación |
-|-----------|--------|----------------|
-| \(Q^*\) | 367 unid | Tamaño óptimo del pedido |
-| \(R\) | 73 unid | Punto de reposición |
-| \(SS\) | 13 unid | Colchón de seguridad |
-| \(C(Q^*)\) | \$2.940 | Costo anual mínimo |
+| Concepto   | Valor    | Interpretación           |
+|------------|----------|--------------------------|
+| (Q\^\*)    | 367 unid | Tamaño óptimo del pedido |
+| \(R\)      | 73 unid  | Punto de reposición      |
+| (SS)       | 13 unid  | Colchón de seguridad     |
+| (C(Q\^\*)) | \$2.940  | Costo anual mínimo       |
 
----
+------------------------------------------------------------------------
 
 ## 💻 Código en R
 
@@ -301,7 +293,6 @@ C_annual <- K*D/Q_star + h*Q_star/2
 
 list(Q_star=Q_star, R=R, C_annual=C_annual)
 ```
-
 
 ```{r}
 # Parámetros
@@ -363,6 +354,7 @@ for (t in 1:days) {
 
 list(orders = orders, stockouts = stockouts, end_inventory = inv)
 ```
+
 ```{r}
 #| message: false
 #| warning: false
@@ -458,6 +450,7 @@ resumen <- list(
 )
 resumen
 ```
+
 ```{r}
 ggplot(df, aes(day, inv_onhand)) +
 geom_line() +
@@ -467,6 +460,7 @@ x = "Día", y = "Unidades") +
 annotate("text", x = max(df$day)*0.85, y = R + 5, label = paste0("R = ", R))
 
 ```
+
 ```{r}
 ggplot(df, aes(day, inv_onhand)) +
 geom_line() +
@@ -489,6 +483,7 @@ x = "Día", y = "Unidades acumuladas")
 
 
 ```
+
 ```{r}
 ggplot(df, aes(demand)) +
 geom_histogram(binwidth = 1, boundary = 0, closed = "left") +
@@ -497,15 +492,9 @@ x = "Unidades por día", y = "Frecuencia")
 
 ```
 
-
 **Notas didácticas:**
 
-- La **línea discontinua** indica el **punto de pedido R**. Verás que los **pedidos** se emiten justo cuando el inventario baja a ese nivel.  
-- El **salto** en el inventario coincide con un **arribo** tras $L$ días.  
-- El gráfico de **stockouts** te muestra si, pese al $CSL=95\%$, hubo demanda no atendida (debería ser baja/ocasional).  
-- El **histograma** ayuda a explicar por qué necesitamos **stock de seguridad**: la demanda diaria fluctúa. 
-
-
-
-
-
+-   La **línea discontinua** indica el **punto de pedido R**. Verás que los **pedidos** se emiten justo cuando el inventario baja a ese nivel.\
+-   El **salto** en el inventario coincide con un **arribo** tras $L$ días.\
+-   El gráfico de **stockouts** te muestra si, pese al $CSL=95\%$, hubo demanda no atendida (debería ser baja/ocasional).\
+-   El **histograma** ayuda a explicar por qué necesitamos **stock de seguridad**: la demanda diaria fluctúa.
