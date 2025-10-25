@@ -62,7 +62,7 @@ Proceso de **planificar, controlar y optimizar** la disponibilidad de insumos m�
 ## 🔁 Tipos de políticas
 
 | Tipo | Descripción | Notación |
-|-----------------|-------------------------------|------------------------|
+|------------------|------------------------------|------------------------|
 | **Revisión continua** | Se repone cuando el inventario baja a un umbral $R$ | Política (Q, R) |
 | **Revisión periódica** | Se revisa en intervalos fijos de tiempo. | Política (s, S) |
 
@@ -226,8 +226,6 @@ $$
 \Pr(X \le R) \ge 0.95
 $$
 
-------------------------------------------------------------------------
-
 ## 4️⃣ Cálculo del punto de pedido
 
 ### Aproximación Normal
@@ -248,8 +246,6 @@ $$
 SS = R - \lambda L = 73 - 60 = 13
 $$
 
-------------------------------------------------------------------------
-
 ## 5️⃣ Costo total anual
 
 $$
@@ -263,8 +259,6 @@ $$
 
 💰 **Costo total anual:** ≈ \$2.940
 
-------------------------------------------------------------------------
-
 ## 📊 Resultados clave
 
 | Concepto   | Valor    | Interpretación           |
@@ -273,8 +267,6 @@ $$
 | \(R\)      | 73 unid  | Punto de reposición      |
 | (SS)       | 13 unid  | Colchón de seguridad     |
 | (C(Q\^\*)) | \$2.940  | Costo anual mínimo       |
-
-------------------------------------------------------------------------
 
 ## 💻 Código en R
 
