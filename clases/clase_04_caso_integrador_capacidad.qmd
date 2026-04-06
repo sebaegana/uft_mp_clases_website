@@ -1,0 +1,408 @@
+---
+listing_title: "Clase 04"
+title: |
+  | \includegraphics[width=5cm]{Imagen5.png}  
+  | ECO5008 Modelos predictivos
+subtitle: Clase 04 - Caso Integrador de Capacidad y Ocupación Hospitalaria
+format: pdf
+editor: visual
+author:   
+  - Sebastián Egaña Santibáñez [{{< fa brands inbox >}}](mailto:segana@fen.uchile.cl)
+code-block-bg: true
+code-block-border-left: "#FF0000"
+---
+
+------------------------------------------------------------------------
+
+# Enlaces del profesor
+
+[{{< fa brands link >}}](https://segana.netlify.app) https://segana.netlify.app
+
+[{{< fa brands github >}}](https://github.com/sebaegana) https://github.com/sebaegana
+
+[{{< fa brands linkedin >}}](https://www.linkedin.com/in/sebastian-egana-santibanez/) https://www.linkedin.com/in/sebastian-egana-santibanez/
+
+------------------------------------------------------------------------
+
+```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
+library(arrow)
+library(fontawesome)
+library(knitr)
+library(tidyverse)
+```
+
+# Clase 04
+
+## Objetivo de la clase
+
+Integrar pronóstico, simulación y análisis de duración para apoyar decisiones de capacidad hospitalaria en contextos de incertidumbre.
+
+## Problema de gestión que aborda
+
+Las instituciones de salud deben decidir cuántas camas habilitar, cómo anticipar períodos de alta presión asistencial y qué medidas de gestión podrían reducir el riesgo de saturación.
+
+## Decisión que apoya el modelo
+
+El caso apoya decisiones relacionadas con planificación de camas, gestión de ocupación, manejo de capacidad estacional y evaluación de estrategias para reducir rechazos, demoras o sobrecarga operativa.
+
+## Aprendizajes esperados
+
+Al finalizar la clase, el estudiante debería ser capaz de interpretar un caso de capacidad hospitalaria bajo incertidumbre, discutir escenarios de ocupación y traducir resultados cuantitativos en recomendaciones de gestión.
+
+## Aplicación en instituciones de salud
+
+Este enfoque puede aplicarse a planificación de camas médicas o quirúrgicas, unidades de hospitalización transitoria, gestión de urgencias y evaluación de políticas de expansión temporal de capacidad.
+
+# Conceptos iniciales
+
+## 🏥 Capacidad hospitalaria y decisiones bajo incertidumbre
+
+La gestión de camas hospitalarias es uno de los problemas más relevantes en instituciones de salud, porque conecta demanda asistencial, duración de estadías, recursos clínicos y continuidad operacional.
+
+Cuando la demanda supera la capacidad disponible, la institución enfrenta consecuencias tales como:
+
+-   aumento en tiempos de espera,
+-   derivaciones o rechazos,
+-   mayor presión sobre urgencias,
+-   uso ineficiente de camas en otras unidades,
+-   deterioro en la experiencia del paciente y del equipo clínico.
+
+## 🧮 ¿Por qué no basta con usar promedios?
+
+Una aproximación común consiste en estimar requerimientos de camas usando promedios de ingresos y duración de estadía. Sin embargo, esto suele ser insuficiente por al menos cuatro razones:
+
+1.  la demanda cambia en el tiempo,
+2.  la duración de estadía presenta variabilidad considerable,
+3.  la ocupación no responde linealmente a pequeños cambios en la demanda,
+4.  el riesgo de saturación depende no solo del promedio, sino también de la dispersión y de la estacionalidad.
+
+## 📊 Variables clave en el caso
+
+Para analizar este problema, resulta útil distinguir algunas variables:
+
+-   ingresos esperados por período,
+-   duración promedio y distribución de estadía,
+-   número de camas disponibles,
+-   ocupación esperada,
+-   probabilidad de saturación,
+-   tasa de rechazos o pacientes diferidos.
+
+## 🧩 Lo que integra este caso
+
+Este caso integrador retoma elementos vistos en las clases anteriores:
+
+-   de la Clase 01: pronóstico de demanda y simulación,
+-   de la Clase 02: evaluación de decisiones bajo costo, riesgo y nivel de servicio,
+-   de la Clase 03: duración de estadía, variabilidad y análisis con Weibull.
+
+La idea no es introducir una técnica completamente nueva, sino mostrar cómo estas herramientas pueden combinarse para responder una pregunta de gestión hospitalaria concreta.
+
+## Preguntas para discusión
+
+-   ¿Qué indicadores deberían observar los directivos hospitalarios para anticipar problemas de capacidad?
+-   ¿Qué diferencia existe entre una alta ocupación “eficiente” y una ocupación “riesgosa”?
+-   ¿Qué decisiones de corto plazo y de mediano plazo podrían tomarse frente a una proyección de saturación?
+
+# 🧪 Caso integrador guiado
+
+## 🎯 Objetivo del ejercicio
+
+Resolver en clases un caso aplicado de capacidad hospitalaria en el que se debe interpretar información de demanda, duración de estadías y ocupación esperada para formular recomendaciones de gestión.
+
+## 🏥 Contexto del caso
+
+Un hospital de mediana complejidad desea evaluar si su capacidad actual de camas médicas será suficiente para enfrentar un período de mayor demanda respiratoria durante los próximos meses.
+
+El equipo directivo cuenta con tres insumos:
+
+-   proyecciones de ingresos semanales,
+-   estimaciones de duración de estadía,
+-   capacidad disponible de camas bajo distintos escenarios.
+
+El objetivo no es solo proyectar ocupación, sino también discutir qué hacer si el sistema entra en una zona de riesgo.
+
+## 📌 Pregunta central
+
+¿Cómo debería planificarse la capacidad de camas para enfrentar un aumento esperado de demanda, manteniendo un equilibrio razonable entre eficiencia operativa y riesgo de saturación?
+
+## 📥 Insumos del caso
+
+Durante la resolución guiada se trabajará con insumos concretos para estructurar el análisis:
+
+-   ingresos esperados por semana,
+-   duración promedio de estadía y su variabilidad,
+-   ocupación histórica o nivel base de uso de camas,
+-   capacidad actual de camas médicas,
+-   escenarios alternativos de expansión temporal o reducción de estadía,
+-   un criterio operativo para identificar saturación.
+
+## 🛠️ Estrategia de resolución
+
+Para resolver el caso en clases, seguiremos una secuencia breve:
+
+1.  estimar la demanda esperada en un período de mayor presión asistencial,
+2.  traducir la duración de estadía en requerimientos de ocupación,
+3.  comparar escenarios de capacidad y gestión,
+4.  formular una recomendación ejecutiva para el equipo directivo.
+
+## 🧩 Escenarios a comparar
+
+El análisis puede organizarse en torno a preguntas como las siguientes:
+
+1.  ¿Qué ocurre si la demanda crece y la capacidad se mantiene constante?
+2.  ¿Qué ocurre si se habilitan camas adicionales de forma temporal?
+3.  ¿Qué ocurre si se logra reducir la duración de estadía mediante mejoras de gestión?
+4.  ¿Qué combinación de medidas parece más razonable desde una perspectiva gerencial?
+
+## 📊 Resultados esperados de la discusión
+
+Al resolver el caso, interesa observar al menos:
+
+-   ocupación estimada,
+-   momentos de mayor presión,
+-   probabilidad o riesgo de saturación,
+-   implicancias para urgencias y hospitalización,
+-   trade-off entre costo, flexibilidad y nivel de servicio.
+
+## 💬 Preguntas para discusión
+
+-   ¿Qué escenario parece más realista para una institución de salud con recursos limitados?
+-   ¿Es preferible operar con alta ocupación promedio o mantener holgura de capacidad?
+-   ¿Qué riesgo gerencial aparece si la decisión se basa solo en promedios históricos?
+-   ¿Qué recomendación ejecutiva debería entregarse al equipo directivo?
+
+## 1️⃣ Preparación de los insumos
+
+Usaremos como referencia las atenciones respiratorias semanales del Complejo Hospitalario Dr. Sótero del Río para construir un horizonte de planificación de 8 semanas.
+
+**Supuestos del caso**
+
+-   Las semanas `20:27` representan un período de alta presión respiratoria.
+-   Se usará el promedio `2022-2024` para estimar la demanda base.
+-   Se asume que el `18%` de las urgencias respiratorias relevantes requiere ingreso.
+-   La capacidad base es de `40 camas médicas`.
+-   La ocupación inicial del servicio es de `28 camas`.
+-   La duración de estadía se modelará con una Weibull de `shape = 1.6` y `scale = 5.8`.
+
+```{r}
+hospital_name <- "Complejo Hospitalario Dr. Sótero del Río (Santiago, Puente Alto)"
+target_weeks <- 20:27
+analysis_years <- 2022:2024
+admission_rate <- 0.18
+base_capacity <- 40
+base_occupancy <- 28
+weibull_shape <- 1.6
+weibull_scale <- 5.8
+
+data_candidates <- c(
+  file.path("data", "at_urg_respiratorio_semanal.parquet"),
+  file.path("clases", "data", "at_urg_respiratorio_semanal.parquet")
+)
+
+data_path <- data_candidates[file.exists(data_candidates)][1]
+stopifnot(!is.na(data_path))
+
+urgencias <- read_parquet(data_path) |>
+  filter(
+    EstablecimientoGlosa == hospital_name,
+    Causa == "TOTAL CAUSAS SISTEMA RESPIRATORIO"
+  ) |>
+  arrange(Anio, SemanaEstadistica)
+
+demanda_base <- urgencias |>
+  filter(Anio %in% analysis_years, SemanaEstadistica %in% target_weeks) |>
+  group_by(SemanaEstadistica) |>
+  summarise(
+    urgencias_promedio = mean(NumTotal, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  mutate(
+    ingresos_base = urgencias_promedio * admission_rate,
+    ingresos_alta_demanda = ingresos_base * 1.20
+  )
+
+demanda_base |>
+  transmute(
+    `Semana estadística` = SemanaEstadistica,
+    `Urgencias respiratorias promedio` = round(urgencias_promedio, 1),
+    `Ingresos esperados base` = round(ingresos_base, 1),
+    `Ingresos esperados alta demanda` = round(ingresos_alta_demanda, 1)
+  ) |>
+  kable(caption = "Insumos semanales para el caso integrador")
+```
+
+## 2️⃣ Traducción a ocupación esperada
+
+La lógica del caso es la siguiente:
+
+1.  convertir urgencias respiratorias en ingresos esperados,
+2.  distribuir esos ingresos a nivel diario,
+3.  simular duración de estadía con Weibull,
+4.  proyectar ocupación bajo distintos escenarios de capacidad.
+
+```{r}
+daily_lambda_from_weekly <- function(weekly_admissions) {
+  rep(weekly_admissions / 7, each = 7)
+}
+
+simulate_occupancy <- function(
+  daily_lambda,
+  capacity,
+  los_shape,
+  los_scale,
+  baseline_occupancy,
+  n_sim = 1000
+) {
+  horizon <- length(daily_lambda)
+  runs <- vector("list", n_sim)
+
+  for (sim in seq_len(n_sim)) {
+    respiratory_occupancy <- numeric(horizon)
+
+    for (day in seq_len(horizon)) {
+      admissions_today <- rpois(1, daily_lambda[day])
+      if (admissions_today == 0) {
+        next
+      }
+
+      los_days <- pmax(1, ceiling(rweibull(admissions_today, shape = los_shape, scale = los_scale)))
+
+      for (stay in los_days) {
+        end_day <- min(horizon, day + stay - 1)
+        respiratory_occupancy[day:end_day] <- respiratory_occupancy[day:end_day] + 1
+      }
+    }
+
+    total_occupancy <- baseline_occupancy + respiratory_occupancy
+
+    runs[[sim]] <- tibble(
+      sim = sim,
+      day = seq_len(horizon),
+      occupancy = total_occupancy,
+      overflow = pmax(total_occupancy - capacity, 0)
+    )
+  }
+
+  bind_rows(runs)
+}
+```
+
+## 3️⃣ Escenarios a comparar
+
+```{r}
+set.seed(123)
+
+scenarios <- tribble(
+  ~scenario,                          ~capacity, ~demand_multiplier, ~los_multiplier,
+  "Base",                                  40,               1.00,            1.00,
+  "Alta demanda",                          40,               1.20,            1.00,
+  "Alta demanda + 6 camas",               46,               1.20,            1.00,
+  "Alta demanda + estadía -10%",          40,               1.20,            0.90
+) |>
+  mutate(
+    weekly_admissions = map(
+      demand_multiplier,
+      ~ demanda_base$ingresos_base * .x
+    ),
+    daily_lambda = map(weekly_admissions, daily_lambda_from_weekly),
+    sim_data = pmap(
+      list(daily_lambda, capacity, los_multiplier),
+      \(daily_lambda, capacity, los_multiplier) {
+        simulate_occupancy(
+          daily_lambda = daily_lambda,
+          capacity = capacity,
+          los_shape = weibull_shape,
+          los_scale = weibull_scale * los_multiplier,
+          baseline_occupancy = base_occupancy,
+          n_sim = 1000
+        )
+      }
+    )
+  )
+```
+
+## 4️⃣ Resumen gerencial de resultados
+
+```{r}
+summary_table <- scenarios |>
+  transmute(
+    Escenario = scenario,
+    Capacidad = capacity,
+    Datos = sim_data
+  ) |>
+  rowwise() |>
+  mutate(
+    `Ocupación promedio` = mean(Datos$occupancy),
+    `Pico promedio` = mean(tapply(Datos$occupancy, Datos$sim, max)),
+    `Pico p90` = quantile(tapply(Datos$occupancy, Datos$sim, max), 0.90),
+    `Prob. saturación` = mean(tapply(Datos$occupancy > Capacidad, Datos$sim, any)),
+    `Exceso esperado cama-día` = mean(tapply(Datos$overflow, Datos$sim, sum))
+  ) |>
+  ungroup() |>
+  mutate(across(where(is.numeric), ~ round(., 2))) |>
+  select(-Datos)
+
+summary_table |>
+  kable(caption = "Comparación de escenarios de capacidad hospitalaria")
+```
+
+```{r}
+plot_data <- scenarios |>
+  select(scenario, capacity, sim_data) |>
+  unnest(sim_data) |>
+  group_by(scenario, capacity, day) |>
+  summarise(
+    mean_occupancy = mean(occupancy),
+    p90_occupancy = quantile(occupancy, 0.90),
+    .groups = "drop"
+  )
+
+ggplot(plot_data, aes(day, mean_occupancy, color = scenario)) +
+  geom_line(linewidth = 0.9) +
+  geom_linerange(aes(ymin = mean_occupancy, ymax = p90_occupancy), alpha = 0.15) +
+  facet_wrap(~ scenario, ncol = 2) +
+  geom_hline(aes(yintercept = capacity), linetype = 2, color = "firebrick") +
+  scale_y_continuous(labels = scales::label_number(big.mark = ".", decimal.mark = ",")) +
+  labs(
+    title = "Ocupación promedio y percentil 90 por escenario",
+    subtitle = "Línea punteada: capacidad disponible",
+    x = "Día del horizonte de planificación",
+    y = "Camas ocupadas"
+  ) +
+  theme_minimal()
+```
+
+## 5️⃣ Lectura ejecutiva del caso
+
+Este tipo de salida permite responder preguntas como:
+
+-   ¿cuánto aumenta el riesgo de saturación si la demanda sube y no cambia la capacidad?;
+-   ¿cuánto aporta habilitar camas transitorias?;
+-   ¿qué efecto tendría una reducción de estadía sobre la presión del servicio?;
+-   ¿qué combinación de medidas parece más razonable para la institución?
+
+# 🏥 Implicancias para la gestión
+
+Desde una perspectiva MBA, el valor del caso no está solo en estimar una ocupación futura, sino en mostrar cómo la analítica apoya decisiones concretas de capacidad, financiamiento y organización clínica.
+
+En este tipo de problemas, los modelos predictivos permiten:
+
+-   anticipar cuellos de botella,
+-   comparar alternativas de gestión,
+-   hacer explícito el costo del riesgo,
+-   evaluar escenarios de ocupación, rechazo y capacidad flexible,
+-   y justificar decisiones frente a directivos, clínicos y responsables financieros.
+
+## 🧭 Cierre de la clase
+
+La principal idea de esta clase es que una buena decisión de capacidad hospitalaria no surge únicamente de observar promedios, sino de integrar pronóstico, variabilidad y escenarios de gestión.
+
+Por eso, el caso integrador cierra el curso mostrando que los modelos predictivos tienen valor cuando permiten pasar de los datos a una recomendación estratégica aplicable en instituciones de salud.
+
+# Referencias
+
+-   Harper, P. R., & Shahani, A. K. (2002). Modelling for the planning and management of bed capacities in hospitals. Journal of the Operational Research Society, 53(1), 11-18.
+
+-   Heins, J., Schoenfelder, J., Heider, S., Heller, A. R., & Brunner, J. O. (2022). A scalable forecasting framework to predict COVID-19 hospital bed occupancy. INFORMS Journal on Applied Analytics, 52(6), 508-523.
+
+-   Vecillas Martin, D., Berruezo Fernández, C., & Gento Municio, A. M. (2025). Systematic Review of Discrete Event Simulation in Healthcare and Statistics Distributions. Applied Sciences, 15(4), 1861.
