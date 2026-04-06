@@ -312,7 +312,13 @@ library(arrow)
 
 
 #dataset_converted <- read_csv("data/dataset_converted.csv")
-df <- read_parquet("data/at_urg_respiratorio_semanal.parquet")  
+data_candidates <- c(
+  file.path("data", "at_urg_respiratorio_semanal.parquet"),
+  file.path("clases", "data", "at_urg_respiratorio_semanal.parquet")
+)
+data_path <- data_candidates[file.exists(data_candidates)][1]
+stopifnot(!is.na(data_path))
+df <- read_parquet(data_path)
 
 df_filtered <- df %>% 
   filter(Causa == "TOTAL CAUSAS SISTEMA RESPIRATORIO")

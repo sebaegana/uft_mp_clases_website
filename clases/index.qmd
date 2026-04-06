@@ -15,6 +15,22 @@ show_activity_now <- isTRUE(show_final_activity)
 
 En esta sección se encuentran las clases y actividades del curso, organizadas según la secuencia de trabajo del programa.
 
+## Prerrequisitos
+
+Antes de trabajar con los códigos del curso, conviene considerar lo siguiente:
+
+- Tener instalado `R` y, de preferencia, `RStudio` o Jupyter con kernel de `R`.
+- Instalar los paquetes requeridos por cada clase antes de ejecutar los scripts o notebooks.
+- Verificar la disponibilidad de los datasets incluidos en [clases/data](c:/Users/sebae/Downloads/UFTP%20-%20Modelos%20Predictivos/uft_mp_clases_website/clases/data).
+
+Datasets principales del curso:
+
+- `at_urg_respiratorio_semanal.parquet`: usado en Clase 01 y Clase 04.
+- `viarapida.xlsm`: usado en Clase 03.
+- La Clase 02 de inventarios no requiere un dataset externo, porque trabaja con parámetros definidos en el script.
+
+En Jupyter o Google Colab, lo más importante es revisar las rutas de archivos y asegurar que el dataset esté cargado en el entorno de trabajo.
+
 ## Clase introductoria
 
 - [Clase 00: Introducción a los modelos predictivos](/clases/clase_00_introduccion_modelos_predictivos.html)

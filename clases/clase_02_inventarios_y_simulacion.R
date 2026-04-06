@@ -1,3 +1,7 @@
+# Prerrequisitos
+# - Paquetes: dplyr, ggplot2, tidyr, tibble.
+# - No requiere datasets externos; el caso utiliza parametros definidos dentro del script.
+
 # Paquetes
 library(dplyr)
 library(ggplot2)

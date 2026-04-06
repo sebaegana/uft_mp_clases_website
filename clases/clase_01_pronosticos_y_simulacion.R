@@ -1,3 +1,8 @@
+# Prerrequisitos
+# - Paquetes: tidyquant, tidyverse, scales, readr, DataExplorer, kableExtra, knitr, arrow.
+# - Dataset requerido: clases/data/at_urg_respiratorio_semanal.parquet (o data/... segun directorio de trabajo).
+# - Conexion a internet recomendada para descargar precios de Yahoo Finance.
+
 # Paquetes
 library(tidyquant)
 library(tidyverse)
@@ -116,7 +121,13 @@ library(arrow)
 
 
 #dataset_converted <- read_csv("data/dataset_converted.csv")
-df <- read_parquet("clases/data/at_urg_respiratorio_semanal.parquet")  
+data_candidates <- c(
+  file.path("clases", "data", "at_urg_respiratorio_semanal.parquet"),
+  file.path("data", "at_urg_respiratorio_semanal.parquet")
+)
+data_path <- data_candidates[file.exists(data_candidates)][1]
+stopifnot(!is.na(data_path))
+df <- read_parquet(data_path)
 
 df_filtered <- df %>% 
   filter(Causa == "TOTAL CAUSAS SISTEMA RESPIRATORIO")

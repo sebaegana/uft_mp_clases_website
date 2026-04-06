@@ -1,3 +1,8 @@
+# Prerrequisitos
+# - Paquetes: readxl, dplyr, tidyr, tibble, ggplot2, knitr, fitdistrplus, survival, flexsurv, lubridate.
+# - Dataset requerido: clases/data/viarapida.xlsm (o data/... segun directorio de trabajo).
+# - Conexion a internet opcional; el script intenta descargar una copia remota si no encuentra el archivo local.
+
 # Paquetes
 library(readxl)
 library(dplyr)
