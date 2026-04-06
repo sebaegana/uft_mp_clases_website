@@ -1,0 +1,183 @@
+---
+listing_title: "Clase 00"
+title: |
+  | ![](Imagen5.png){width=3.2cm}
+  | ECO5008 Modelos predictivos
+subtitle: Clase introductoria - Modelos predictivos y toma de decisiones en salud
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    chalkboard: false
+    incremental: false
+editor: visual
+author:
+  - Sebastián Egaña Santibáñez
+---
+
+```{r load_packages, include=FALSE}
+library(fontawesome)
+```
+
+# Presentación del curso
+
+## Sobre el curso
+
+Cada decisión en salud se basa, de forma explícita o implícita, en una predicción. El valor está en hacer esa predicción con evidencia, y eso es justamente lo que trabajaremos en este curso.
+
+## Sobre el docente
+
+- `r fa("inbox")` `segana@fen.uchile.cl`
+- `r fa("link")` `https://segana.netlify.app`
+- `r fa("linkedin")` `https://www.linkedin.com/in/sebastian-egana-santibanez`
+
+# ¿Por qué un curso de modelos predictivos?
+
+## Tres ideas centrales
+
+- **Decisiones:** toda institución de salud debe tomar decisiones de gestión.
+- **Predicción:** decidir implica formar una visión razonable del futuro a partir de información pasada y presente.
+- **Evidencia:** una buena decisión requiere datos, método y criterio.
+
+## En contexto de salud
+
+Los modelos predictivos pueden apoyar decisiones sobre:
+
+- demanda de pacientes,
+- ocupación de camas,
+- duración de estadías,
+- gestión de recursos críticos,
+- continuidad operativa,
+- e inventarios.
+
+# Método científico y Decision Science
+
+## 🧪 Método científico
+
+El método científico es una forma sistemática de entender la realidad y generar conocimiento a partir de observación, medición, análisis y contraste de hipótesis.
+
+Etapas típicas:
+
+1. observación,
+2. formulación de hipótesis,
+3. medición o experimentación,
+4. análisis de resultados,
+5. conclusión.
+
+## 📊 Decision Science
+
+Decision Science corresponde a un enfoque sistemático y basado en datos para resolver problemas y mejorar el desempeño.
+
+Su lógica puede resumirse en cuatro pasos:
+
+1. definir el problema,
+2. reunir y analizar datos,
+3. desarrollar y evaluar alternativas,
+4. seleccionar e implementar soluciones.
+
+Esta lógica será transversal al curso: **datos → análisis → decisión → acción**.
+
+# Relación con pronósticos
+
+## Pronóstico y decisión
+
+Para decidir mejor, necesitamos:
+
+- claridad sobre el problema que queremos resolver,
+- información pertinente y confiable,
+- herramientas para identificar patrones,
+- estimaciones que permitan reducir incertidumbre y comparar alternativas.
+
+## Ejemplo de gestión en salud
+
+Un hospital puede utilizar pronósticos para anticipar aumentos en la demanda respiratoria y preparar:
+
+- asignación de turnos,
+- disponibilidad de camas,
+- abastecimiento de insumos,
+- capacidad de respuesta operativa.
+
+# Del análisis descriptivo a la decisión
+
+## 🔎 No basta con describir el pasado
+
+El análisis descriptivo ayuda a entender lo que ocurrió mediante:
+
+- visualizaciones,
+- estadísticas de resumen,
+- comparación de indicadores,
+- detección de patrones históricos.
+
+## 🧭 Lo que buscamos en este curso
+
+Queremos avanzar hacia análisis que permitan:
+
+- anticipar escenarios futuros,
+- comparar alternativas,
+- simular incertidumbre,
+- y recomendar acciones concretas.
+
+# Riesgos en la toma de decisiones
+
+## ⚠️ Algunos sesgos frecuentes
+
+- **Confirmation bias:** buscar información que confirme lo que ya creemos.
+- **Anchoring bias:** depender demasiado de la primera cifra o referencia disponible.
+- **Loss aversion:** dar más peso a evitar pérdidas que a obtener ganancias equivalentes.
+- **Availability heuristic:** sobreestimar eventos que recordamos con facilidad.
+
+## Implicancia práctica
+
+Una buena analítica no elimina completamente los sesgos, pero sí ayuda a hacerlos visibles y a disciplinar la decisión.
+
+Por eso, el uso de modelos no reemplaza el juicio directivo, sino que lo disciplina.
+
+# Experimentación y aprendizaje
+
+## ¿Por qué importa experimentar?
+
+Experimentar permite aprender sobre relaciones causa-efecto, validar hipótesis y comparar alternativas antes de escalar una decisión.
+
+En gestión, esto puede verse como:
+
+- pilotos,
+- pruebas controladas,
+- análisis de escenarios,
+- simulaciones antes de implementar cambios.
+
+## Idea clave
+
+Reducir riesgo es valioso, pero reducirlo al extremo también puede ser costoso. Por eso, en gestión importa encontrar equilibrios razonables bajo incertidumbre.
+
+# ¿Qué haremos en el curso?
+
+## Ruta de trabajo
+
+Durante el curso trabajaremos cuatro bloques:
+
+1. pronósticos y simulación,
+2. decisiones operativas e inventarios bajo incertidumbre,
+3. modelos de supervivencia y Weibull,
+4. caso integrador de capacidad hospitalaria.
+
+## En términos prácticos
+
+Seremos un equipo de analistas que busca transformar datos en decisiones útiles para instituciones de salud.
+
+Aplicaremos modelos predictivos a problemas como:
+
+- demanda respiratoria,
+- duración de procesos hospitalarios,
+- confiabilidad de recursos,
+- inventarios,
+- y capacidad hospitalaria.
+
+# Cierre
+
+## 💬 Idea final
+
+El valor de un modelo no está solo en predecir, sino en **ayudar a decidir mejor**.
+
+## Próximo paso
+
+En la siguiente clase comenzaremos con pronósticos y simulación, como primera base analítica para apoyar decisiones en instituciones de salud.
