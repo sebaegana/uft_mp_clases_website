@@ -10,6 +10,7 @@ format:
     slide-number: true
     chalkboard: false
     incremental: false
+  pdf: default
 editor: visual
 author:
   - Sebastián Egaña Santibáñez
