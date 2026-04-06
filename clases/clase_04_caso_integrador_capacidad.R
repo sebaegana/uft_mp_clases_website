@@ -1,3 +1,7 @@
+# Prerrequisitos
+# - Paquetes: arrow, dplyr, ggplot2, knitr, purrr, scales, tibble, tidyr.
+# - Dataset requerido: clases/data/at_urg_respiratorio_semanal.parquet (o data/... segun directorio de trabajo).
+
 # Paquetes
 library(arrow)
 library(dplyr)

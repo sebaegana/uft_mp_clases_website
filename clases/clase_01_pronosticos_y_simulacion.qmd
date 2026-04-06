@@ -22,6 +22,8 @@ code-block-border-left: "#FF0000"
 
 [{{< fa brands linkedin >}}](https://www.linkedin.com/in/sebastian-egana-santibanez/) https://www.linkedin.com/in/sebastian-egana-santibanez/
 
+[{{< fa solid globe >}}](https://sebaegana.github.io/uft_mp_clases_website/) https://sebaegana.github.io/uft_mp_clases_website/
+
 ------------------------------------------------------------------------
 
 ```{r load_packages, message=FALSE, warning=FALSE, include=FALSE}
@@ -310,7 +312,13 @@ library(arrow)
 
 
 #dataset_converted <- read_csv("data/dataset_converted.csv")
-df <- read_parquet("data/at_urg_respiratorio_semanal.parquet")  
+data_candidates <- c(
+  file.path("data", "at_urg_respiratorio_semanal.parquet"),
+  file.path("clases", "data", "at_urg_respiratorio_semanal.parquet")
+)
+data_path <- data_candidates[file.exists(data_candidates)][1]
+stopifnot(!is.na(data_path))
+df <- read_parquet(data_path)
 
 df_filtered <- df %>% 
   filter(Causa == "TOTAL CAUSAS SISTEMA RESPIRATORIO")

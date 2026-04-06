@@ -30,6 +30,7 @@ Cada decisión en salud se basa, de forma explícita o implícita, en una predic
 - `r fa("inbox")` `segana@fen.uchile.cl`
 - `r fa("link")` `https://segana.netlify.app`
 - `r fa("linkedin")` `https://www.linkedin.com/in/sebastian-egana-santibanez`
+- `r fa("globe")` `https://sebaegana.github.io/uft_mp_clases_website/`
 
 # ¿Por qué un curso de modelos predictivos?
 
