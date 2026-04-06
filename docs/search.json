@@ -35,11 +35,130 @@
     "text": "Contacto\nSebastián Egaña Santibáñez\nDocente del curso\n\n📧 segana@fen.uchile.cl\n\n💼 LinkedIn\n💻Página Web\n🐈Github"
   },
   {
-    "objectID": "clases/index.html",
-    "href": "clases/index.html",
-    "title": "Clases",
-    "section": "",
-    "text": "Clases del curso\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nActividad 01\n\n\n\n\n\n\n\n\n\n\n\nClase 01\n\n\n\n\n\n\n\n\n\n\n\nClase 02\n\n\n\n\n\n\n\n\n\n\n\nClase 03\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#sobre-el-curso",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#sobre-el-curso",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Sobre el curso",
+    "text": "Sobre el curso\nCada decisión en salud se basa, de forma explícita o implícita, en una predicción. El valor está en hacer esa predicción con evidencia, y eso es justamente lo que trabajaremos en este curso."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#sobre-el-docente",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#sobre-el-docente",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Sobre el docente",
+    "text": "Sobre el docente\n\n segana@fen.uchile.cl\n https://segana.netlify.app\n https://www.linkedin.com/in/sebastian-egana-santibanez\n https://sebaegana.github.io/uft_mp_clases_website/"
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#tres-ideas-centrales",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#tres-ideas-centrales",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Tres ideas centrales",
+    "text": "Tres ideas centrales\n\nDecisiones: toda institución de salud debe tomar decisiones de gestión.\nPredicción: decidir implica formar una visión razonable del futuro a partir de información pasada y presente.\nEvidencia: una buena decisión requiere datos, método y criterio."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#en-contexto-de-salud",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#en-contexto-de-salud",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "En contexto de salud",
+    "text": "En contexto de salud\nLos modelos predictivos pueden apoyar decisiones sobre:\n\ndemanda de pacientes,\nocupación de camas,\nduración de estadías,\ngestión de recursos críticos,\ncontinuidad operativa,\ne inventarios."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#método-científico",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#método-científico",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "🧪 Método científico",
+    "text": "🧪 Método científico\nEl método científico es una forma sistemática de entender la realidad y generar conocimiento a partir de observación, medición, análisis y contraste de hipótesis.\nEtapas típicas:\n\nobservación,\nformulación de hipótesis,\nmedición o experimentación,\nanálisis de resultados,\nconclusión."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#decision-science",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#decision-science",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "📊 Decision Science",
+    "text": "📊 Decision Science\nDecision Science corresponde a un enfoque sistemático y basado en datos para resolver problemas y mejorar el desempeño.\nSu lógica puede resumirse en cuatro pasos:\n\ndefinir el problema,\nreunir y analizar datos,\ndesarrollar y evaluar alternativas,\nseleccionar e implementar soluciones.\n\nEsta lógica será transversal al curso: datos → análisis → decisión → acción."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#pronóstico-y-decisión",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#pronóstico-y-decisión",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Pronóstico y decisión",
+    "text": "Pronóstico y decisión\nPara decidir mejor, necesitamos:\n\nclaridad sobre el problema que queremos resolver,\ninformación pertinente y confiable,\nherramientas para identificar patrones,\nestimaciones que permitan reducir incertidumbre y comparar alternativas."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#ejemplo-de-gestión-en-salud",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#ejemplo-de-gestión-en-salud",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Ejemplo de gestión en salud",
+    "text": "Ejemplo de gestión en salud\nUn hospital puede utilizar pronósticos para anticipar aumentos en la demanda respiratoria y preparar:\n\nasignación de turnos,\ndisponibilidad de camas,\nabastecimiento de insumos,\ncapacidad de respuesta operativa."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#no-basta-con-describir-el-pasado",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#no-basta-con-describir-el-pasado",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "🔎 No basta con describir el pasado",
+    "text": "🔎 No basta con describir el pasado\nEl análisis descriptivo ayuda a entender lo que ocurrió mediante:\n\nvisualizaciones,\nestadísticas de resumen,\ncomparación de indicadores,\ndetección de patrones históricos."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#lo-que-buscamos-en-este-curso",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#lo-que-buscamos-en-este-curso",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "🧭 Lo que buscamos en este curso",
+    "text": "🧭 Lo que buscamos en este curso\nQueremos avanzar hacia análisis que permitan:\n\nanticipar escenarios futuros,\ncomparar alternativas,\nsimular incertidumbre,\ny recomendar acciones concretas."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#algunos-sesgos-frecuentes",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#algunos-sesgos-frecuentes",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "⚠️ Algunos sesgos frecuentes",
+    "text": "⚠️ Algunos sesgos frecuentes\n\nConfirmation bias: buscar información que confirme lo que ya creemos.\nAnchoring bias: depender demasiado de la primera cifra o referencia disponible.\nLoss aversion: dar más peso a evitar pérdidas que a obtener ganancias equivalentes.\nAvailability heuristic: sobreestimar eventos que recordamos con facilidad."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#implicancia-práctica",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#implicancia-práctica",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Implicancia práctica",
+    "text": "Implicancia práctica\nUna buena analítica no elimina completamente los sesgos, pero sí ayuda a hacerlos visibles y a disciplinar la decisión.\nPor eso, el uso de modelos no reemplaza el juicio directivo, sino que lo disciplina."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#por-qué-importa-experimentar",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#por-qué-importa-experimentar",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "¿Por qué importa experimentar?",
+    "text": "¿Por qué importa experimentar?\nExperimentar permite aprender sobre relaciones causa-efecto, validar hipótesis y comparar alternativas antes de escalar una decisión.\nEn gestión, esto puede verse como:\n\npilotos,\npruebas controladas,\nanálisis de escenarios,\nsimulaciones antes de implementar cambios."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#idea-clave",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#idea-clave",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Idea clave",
+    "text": "Idea clave\nReducir riesgo es valioso, pero reducirlo al extremo también puede ser costoso. Por eso, en gestión importa encontrar equilibrios razonables bajo incertidumbre."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#ruta-de-trabajo",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#ruta-de-trabajo",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Ruta de trabajo",
+    "text": "Ruta de trabajo\nDurante el curso trabajaremos cuatro bloques:\n\npronósticos y simulación,\ndecisiones operativas e inventarios bajo incertidumbre,\nmodelos de supervivencia y Weibull,\ncaso integrador de capacidad hospitalaria."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#en-términos-prácticos",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#en-términos-prácticos",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "En términos prácticos",
+    "text": "En términos prácticos\nSeremos un equipo de analistas que busca transformar datos en decisiones útiles para instituciones de salud.\nAplicaremos modelos predictivos a problemas como:\n\ndemanda respiratoria,\nduración de procesos hospitalarios,\nconfiabilidad de recursos,\ninventarios,\ny capacidad hospitalaria."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#idea-final",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#idea-final",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "💬 Idea final",
+    "text": "💬 Idea final\nEl valor de un modelo no está solo en predecir, sino en ayudar a decidir mejor."
+  },
+  {
+    "objectID": "clases/clase_00_introduccion_modelos_predictivos.html#próximo-paso",
+    "href": "clases/clase_00_introduccion_modelos_predictivos.html#próximo-paso",
+    "title": "\nECO5008 Modelos predictivos",
+    "section": "Próximo paso",
+    "text": "Próximo paso\nEn la siguiente clase comenzaremos con pronósticos y simulación, como primera base analítica para apoyar decisiones en instituciones de salud."
   },
   {
     "objectID": "about.html",
@@ -49,18 +168,39 @@
     "text": "About this site\n\n1 + 1 + 1\n\n[1] 3"
   },
   {
-    "objectID": "clases/clases.html",
-    "href": "clases/clases.html",
-    "title": "clases",
+    "objectID": "clases/index.html",
+    "href": "clases/index.html",
+    "title": "Clases",
     "section": "",
-    "text": "Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org.\n\n1 + 1\n\n[1] 2"
+    "text": "En esta sección se encuentran las clases y actividades del curso, organizadas según la secuencia de trabajo del programa.\n\n\nAntes de trabajar con los códigos del curso, conviene considerar lo siguiente:\n\nTener instalado R y, de preferencia, RStudio o Jupyter con kernel de R.\nInstalar los paquetes requeridos por cada clase antes de ejecutar los scripts o notebooks.\nVerificar la disponibilidad de los datasets incluidos en clases/data.\n\nDatasets principales del curso:\n\nat_urg_respiratorio_semanal.parquet: usado en Clase 01 y Clase 04.\nviarapida.xlsm: usado en Clase 03.\nLa Clase 02 de inventarios no requiere un dataset externo, porque trabaja con parámetros definidos en el script.\n\nEn Jupyter o Google Colab, lo más importante es revisar las rutas de archivos y asegurar que el dataset esté cargado en el entorno de trabajo.\n\n\n\n\nClase 00: Introducción a los modelos predictivos\n\n\n\n\n\nClase 01: Pronósticos y simulación en la gestión hospitalaria\nClase 02: Inventarios y decisiones operativas bajo incertidumbre\nClase 03: Supervivencia y Weibull aplicados a salud\nClase 04: Caso integrador de capacidad hospitalaria\n\n\n\n\n\nTrabajo final aplicado\nEstado: disponible próximamente"
   },
   {
-    "objectID": "clases/clases.html#quarto",
-    "href": "clases/clases.html#quarto",
-    "title": "clases",
+    "objectID": "clases/index.html#prerrequisitos",
+    "href": "clases/index.html#prerrequisitos",
+    "title": "Clases",
     "section": "",
-    "text": "Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see https://quarto.org.\n\n1 + 1\n\n[1] 2"
+    "text": "Antes de trabajar con los códigos del curso, conviene considerar lo siguiente:\n\nTener instalado R y, de preferencia, RStudio o Jupyter con kernel de R.\nInstalar los paquetes requeridos por cada clase antes de ejecutar los scripts o notebooks.\nVerificar la disponibilidad de los datasets incluidos en clases/data.\n\nDatasets principales del curso:\n\nat_urg_respiratorio_semanal.parquet: usado en Clase 01 y Clase 04.\nviarapida.xlsm: usado en Clase 03.\nLa Clase 02 de inventarios no requiere un dataset externo, porque trabaja con parámetros definidos en el script.\n\nEn Jupyter o Google Colab, lo más importante es revisar las rutas de archivos y asegurar que el dataset esté cargado en el entorno de trabajo."
+  },
+  {
+    "objectID": "clases/index.html#clase-introductoria",
+    "href": "clases/index.html#clase-introductoria",
+    "title": "Clases",
+    "section": "",
+    "text": "Clase 00: Introducción a los modelos predictivos"
+  },
+  {
+    "objectID": "clases/index.html#desarrollo-del-curso",
+    "href": "clases/index.html#desarrollo-del-curso",
+    "title": "Clases",
+    "section": "",
+    "text": "Clase 01: Pronósticos y simulación en la gestión hospitalaria\nClase 02: Inventarios y decisiones operativas bajo incertidumbre\nClase 03: Supervivencia y Weibull aplicados a salud\nClase 04: Caso integrador de capacidad hospitalaria"
+  },
+  {
+    "objectID": "clases/index.html#actividad-final",
+    "href": "clases/index.html#actividad-final",
+    "title": "Clases",
+    "section": "",
+    "text": "Trabajo final aplicado\nEstado: disponible próximamente"
   },
   {
     "objectID": "index.html",
